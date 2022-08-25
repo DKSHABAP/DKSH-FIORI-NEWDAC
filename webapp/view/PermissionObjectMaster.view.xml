@@ -1,0 +1,24 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+	controllerName="com.incture.cherrywork.newdac.controller.PermissionObjectMaster" xmlns:html="http://www.w3.org/1999/xhtml">
+	<App>
+		<pages>
+			<Page title="{i18n>titleMaster}" showNavButton="true" navButtonPress="onNavBack" class="sapUiSizeCompact permissionMasterCls">
+				<content>
+					<SearchField liveChange="fnMasterFilter" id="mastIdSearch"></SearchField>
+					<List id="ShortProductList" inset="true" items="{aPOModel>/}">
+						<!--updateFinished="onUpdateFinished"-->
+						<items>
+							<StandardListItem title="{aPOModel>permissionObjectText}" info="{aPOModel>domainCode}" press="onListPress" type="Active"/>
+						</items>
+					</List>
+				</content>
+				<footer>
+					<OverflowToolbar>
+						<ToolbarSpacer/>
+						<Button text="{i18n>createPOBtnTxt}" icon="sap-icon://add" press="onCreate" tooltip="{i18n>createPOIcnTT}"/>
+					</OverflowToolbar>
+				</footer>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

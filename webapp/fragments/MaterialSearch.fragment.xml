@@ -1,0 +1,19 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:u="sap.ui.table" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout">
+	<Dialog title="{i18n>matSearch}" class="sapUiSizeCompact">
+		<content>
+			<f:SimpleForm maxContainerCols="1" editable="true" layout="ResponsiveGridLayout" labelSpanL="2" labelSpanM="2" emptySpanL="0" emptySpanM="0"
+				columnsL="1" columnsM="1" class="editableForm simplFormPaddCls">
+				<f:content>
+					<Label text="{i18n>customerIdsearch}" design="Bold"></Label>
+					<Input showValueStateMessage="false" value="{MaterialSerchSet>/MatId}" placeholder="{i18n>enter} {i18n>customerIdsearch}" maxLength="10"></Input>
+					<Label text="{i18n>customerNameSearch}" design="Bold"></Label>
+					<Input showValueStateMessage="false" value="{MaterialSerchSet>/MatName}" placeholder="{i18n>enter} {i18n>customerNameSearch}" maxLength="35"></Input>
+				</f:content>
+			</f:SimpleForm>
+		</content>
+		<buttons>
+			<Button text="{i18n>search}" tooltip="{i18n>search}" press="handleValueHelpMaterialSearchFrag"></Button>
+			<Button text="{i18n>cancel}" tooltip="{i18n>cancel}" press="handleValueHelpMaterialCancelSearchFrag"/>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

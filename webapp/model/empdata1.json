@@ -1,0 +1,87 @@
+[
+	  {
+		"ObjectName": "default",
+		"status": "true",
+		"users":["p00078","p09878","p868787"],
+		"SalesOrg": [
+
+			{
+				"salesid": "CN70",
+				"salesDes": "EKSLSRM",
+				"inclu": "Yes"
+			},
+			{
+				"salesid": "052",
+				"salesDes": "fhg",
+				"inclu": "No"
+			}
+		],
+		"Customer": [{
+				"Number": "170003204",
+				"Name": "khk",
+				"inclu": "Yes"
+			},
+			{
+				"Number": "123445",
+				"Name": "hh",
+				"inclu": "No"
+			}
+		]
+	},
+
+	{
+		"ObjectName": "default2",
+		"status": "true",
+		"users":["p00078","p768","p32247"],
+		"SalesOrg": [
+		{
+			"salesid": "062",
+			"salesDes": "hjgnhg",
+			"inclu": "No"
+		}
+		],
+		"Customer": [{
+				"Number": "170003204",
+				"Name": "khk",
+				"inclu": "Yes"
+			},
+			{
+				"Number": "156567",
+				"Name": "nmbm",
+				"inclu": "Yes"
+			}
+		]
+	},
+
+	{
+		"ObjectName": "default3",
+		"status": "true",
+		"users":["p0008","p00008","p00087"],
+		"SalesOrg": [{
+			"salesid": "072",
+			"salesDes": "dgf",
+			"inclu": " No"
+		}],
+		"Customer": [{
+				"Number": "17634773",
+				"Name": "dsfhdj",
+				"inclu": "Yes"
+			},
+			{
+				"Number": "6778",
+				"Name": "bnvnh",
+				"inclu": "No"
+			},
+			{
+				"Number": "679978",
+				"Name": "nhvhn",
+				"inclu": "No"
+
+			}
+		]
+	}
+
+]
+
+				
+		

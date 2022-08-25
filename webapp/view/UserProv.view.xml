@@ -1,0 +1,79 @@
+<mvc:View controllerName="com.incture.cherrywork.newdac.controller.UserProv" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+	xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:html="http://www.w3.org/1999/xhtml">
+	<html:iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WG969CM" height="0" width="0" style="display:none; visibility:hidden"></html:iframe>
+	<Page id="ID_PAGE_USER_PR" title="" class="sapUiSizeCompact" showNavButton="true" navButtonPress="handleBack">
+		<content>
+			<Table id="ID_TABLE_USR" items="{UsetTableSet>/results}" growing="true" growingThreshold="20" growingScrollToLoad="true" fixedLayout="false"
+				inset="false">
+				<headerToolbar>
+					<Toolbar>
+						<Label id="ID_TXT_HDR" text="{i18n>userDetails}" design="Bold"/>
+						<ToolbarSpacer/>
+						<SearchField id="ID_PROV_USER_DET_M" width="30%" liveChange="onSearchUserList"></SearchField>
+						<Button icon="sap-icon://refresh" type="Transparent" press="refreshBtnUser"/>
+						<Button icon="sap-icon://synchronize" type="Transparent" press="syncBtnUser"/>
+						<Button icon="sap-icon://download" type="Transparent" press="downloadUserRights"/>
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+						<Label text="{i18n>userId}" design="Bold"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+						<Label text="{i18n>name}" design="Bold"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+						<Label text="{i18n>email}" design="Bold"/>
+					</Column>
+					<Column minScreenWidth="Desktop" demandPopin="true" popinDisplay="Inline">
+						<Label text="{i18n>phoneNo}" design="Bold"/>
+					</Column>
+					<Column minScreenWidth="Desktop" demandPopin="true" popinDisplay="Inline">
+						<Label text="{i18n>resetPsw}" design="Bold"/>
+					</Column>
+					<!--	<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+								<Label text="{i18n>groupAssigned}" design="Bold"/>
+							</Column>-->
+					<Column width="8%" minScreenWidth="Desktop" demandPopin="true" popinDisplay="Inline">
+						<Label text="{i18n>mngUserDtlTxt}" design="Bold"/>
+					</Column>
+					<Column width="8%" minScreenWidth="Desktop" demandPopin="true" popinDisplay="Inline" hAlign="Center">
+						<Label text="{i18n>assignPOTxt}" design="Bold"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text text="{UsetTableSet>id}"></Text>
+							<Text text="{UsetTableSet>givenName} {UsetTableSet>familyName}" tooltip="{UsetTableSet>givenName} {UsetTableSet>familyName}"></Text>
+							<Text text="{UsetTableSet>emails}" tooltip="{UsetTableSet>emails}"></Text>
+							<Text text="{UsetTableSet>phoneNumbers}"></Text>
+							<Link text="{i18n>resetPsw}" tooltip="{i18n>resetPsw}" press="onResetPwd"></Link>
+							<HBox>
+								<core:Icon src="sap-icon://group-2" tooltip="{i18n>groupAssigned}" press="onPressAssignedGroup" color="green"/>
+								<core:Icon src="sap-icon://display" tooltip="{i18n>displayDetails}" press="onUserUpdate" class="sapUiSmallMarginBegin"/>
+								<core:Icon src="sap-icon://edit" press="onUserUpdate" tooltip="{i18n>edit}" class="sapUiSmallMarginBegin"></core:Icon>
+								<core:Icon src="sap-icon://delete" color="red" press="onDeleteUser" class="sapUiSmallMarginBegin" tooltip="{i18n>delete}" visible="true"></core:Icon>
+								<!--	<Button icon="sap-icon://display" tooltip="{i18n>groupAssigned}" press="onPressAssignedGroup"/>
+										<Button icon="sap-icon://edit"  press="onRowEdit" tooltip="Edit"></Button>
+										<Button icon="sap-icon://delete" type="Reject" press="onDeleteUser" tooltip="Delete" enabled="false"></Button>-->
+							</HBox>
+							<HBox>
+								<core:Icon src="sap-icon://activity-assigned-to-goal" press="onAssignPo" tooltip="{i18n>assignPOTooltip}" class="sapUiSmallMarginBegin"></core:Icon>
+								<core:Icon src="sap-icon://eraser" press="onUnAssignPo" tooltip="{i18n>Unassign}" class="sapUiSmallMarginBegin"></core:Icon>
+								<!--	<core:Icon src="sap-icon://add-employee" color="blue" press="onCopyUsers" class="sapUiSmallMarginBegin" tooltip="copy permission objects to users" visible="true"></core:Icon>-->
+							</HBox>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer></ToolbarSpacer>
+				<Button text="{i18n>managePOBtn}" tooltip="{i18n>managePOBtn}" type="Accept" icon="sap-icon://detail-view" press="onViewPO"></Button>
+				<Button text="{i18n>createBtn}" tooltip="{i18n>createBtn}" type="Accept" icon="sap-icon://create" press="onUserCreate"></Button>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

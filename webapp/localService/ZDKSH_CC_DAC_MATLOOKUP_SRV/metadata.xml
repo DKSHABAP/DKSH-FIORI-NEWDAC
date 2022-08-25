@@ -1,0 +1,19 @@
+<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+	xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData" Version="1.0">
+	<edmx:DataServices m:DataServiceVersion="2.0">
+		<Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="ZDKSH_CC_DAC_MATLOOKUP_SRV" xml:lang="en" sap:schema-version="1">
+			<EntityType Name="ZSearchHelp_MaterialGroup" sap:content-version="1">
+				<Key><PropertyRef Name="Materialgroup"/></Key><Property Name="Materialgroup" Type="Edm.String" Nullable="false" MaxLength="9" sap:unicode="false" sap:label="Material Group"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Matgroupdesc" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Matl Grp Desc."
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Language" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Language" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="ZSearchHelp_MaterialGroup4" sap:content-version="1">
+				<Key><PropertyRef Name="Materialgroup4"/></Key><Property Name="Materialgroup4" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="MaterialGroup 4"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Matgroup4desc" Type="Edm.String" Nullable="false" MaxLength="25" sap:unicode="false" sap:label="Name" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Language" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Language" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityContainer Name="ZDKSH_CC_DAC_MATLOOKUP_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx"><EntitySet Name="ZSearchHelp_MaterialGroupSet" EntityType="ZDKSH_CC_DAC_MATLOOKUP_SRV.ZSearchHelp_MaterialGroup" sap:creatable="false"
+				sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/><EntitySet Name="ZSearchHelp_MaterialGroup4Set" EntityType="ZDKSH_CC_DAC_MATLOOKUP_SRV.ZSearchHelp_MaterialGroup4" sap:creatable="false"
+				sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/></EntityContainer><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" href="./sap/opu/odata/sap/ZDKSH_CC_DAC_MATLOOKUP_SRV/$metadata"/><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="latest-version" href="./sap/opu/odata/sap/ZDKSH_CC_DAC_MATLOOKUP_SRV/$metadata"/></Schema>
+	</edmx:DataServices>
+</edmx:Edmx>

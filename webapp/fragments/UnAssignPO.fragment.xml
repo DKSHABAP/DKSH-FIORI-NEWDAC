@@ -1,0 +1,29 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog title="Select Domain" contentHeight="40%" class="sapUiSizeCompact" contentWidth="25rem">
+		<content>
+			<SearchField liveChange="assignFreeSearch" id="unassignSearchId"></SearchField>
+			<Table mode="MultiSelect" items="{aUPOModel>/}" id="unassignTable">
+				<columns>
+					<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+						<Label text="Domain" design="Bold"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+						<Label text="Permission Object" design="Bold"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text text="{aUPOModel>domainCode}"></Text>
+							<Text text="{aUPOModel>permissionObjectText}"></Text>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+		<buttons>
+			<Button text="{i18n>cnclBtnTxtFrag}" press="onPressUNCancelFrg"></Button>
+			<Button text="{i18n>unassign}" press="onConfirmUNAddPos"></Button>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,88 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+	<Dialog contentWidth="70%" title="{i18n>createUser}">
+		<content>
+			<f:SimpleForm minWidth="1024" layout="ResponsiveGridLayout" title="" maxContainerCols="2" editable="true" labelSpanL="4" labelSpanM="4"
+				emptySpanL="0" emptySpanM="0" columnsL="2" columnsM="2" class="sapUiSizeCompact">
+				<f:content>
+					<core:Title></core:Title>
+					<Label text="{i18n>group}"/>
+					<MultiComboBox showValueStateMessage="false" placeholder="{i18n>Select} {i18n>group}" items="{GroupModelSet>/results}"
+						selectedKeys="{CreateModelSet>/groupSelected}" selectionChange="onGroupSelectionChange" required="true"
+						valueState="{CreateModelSet>/groupValueState}">
+						<core:Item key="{GroupModelSet>key}" text="{GroupModelSet>desc} ({GroupModelSet>key})"/>
+					</MultiComboBox>
+					<Label text="{i18n>firstName}"/>
+					<Input required="true" showValueStateMessage="false" value="{CreateModelSet>/firstName}" valueState="{CreateModelSet>/firstNameValueState}"
+						placeholder="{i18n>enter} {i18n>firstName}" maxLength="20" liveChange="liveChnageFirstName"></Input>
+					<Label text="{i18n>lastName}"/>
+					<Input required="true" liveChange="liveChnageLastName" showValueStateMessage="false" value="{CreateModelSet>/lastName}"
+						valueState="{CreateModelSet>/lastNameValueState}" placeholder="{i18n>enter} {i18n>lastName}" maxLength="20"></Input>
+					<Label text="{i18n>email}"/>
+					<Input value="{CreateModelSet>/email}" showValueStateMessage="false" valueState="{CreateModelSet>/emailValueState}"
+						placeholder="{i18n>enter} {i18n>email}" required="true" liveChange="liveChnageEmail"></Input>
+					<Label text="{i18n>phoneNo}"/>
+					<Input value="{CreateModelSet>/phoneNo}" showValueStateMessage="false" placeholder="{i18n>enter} {i18n>phoneNo}"
+						liveChange="liveChangePhoneNo"></Input>
+					<Label text="{i18n>country}"/>
+					<ComboBox items="{oCountryModel>/results}" showValueStateMessage="false" placeholder="{i18n>select} {i18n>country}" required="true"
+						selectedKey="{CreateModelSet>/selectedCountry}" valueState="{CreateModelSet>/countryValueState}" change="onCountryChange">
+						<core:Item key="{oCountryModel>key}" text="{oCountryModel>desc}"/>
+					</ComboBox>
+					<core:Title></core:Title>
+					<Label text="{i18n>salesOrganization}"></Label>
+					<MultiInput showValueStateMessage="false" placeholder="{i18n>select} {i18n>salesOrganization}"
+						valueHelpRequest="handleValueHelpSalesOrganization" liveChange="liveChangeLoadPortDispPort" valueHelpOnly="true" showValueHelp="true"
+						tokens="{CreateModelSet>/SalesOrg}">
+						<tokens>
+							<Token key="{CreateModelSet>SalesOrgCode}" text="{CreateModelSet>SalesOrgDesc}" editable="false" select="onPressLoadPortDirty"/>
+						</tokens>
+					</MultiInput>
+					<Label text="{i18n>materialNumber}"></Label>
+					<MultiInput showValueStateMessage="false" placeholder="{i18n>select} {i18n>materialNumber}" valueHelpRequest="handleValueHelpMaterialNumber"
+						liveChange="liveChangeLoadPortDispPort" valueHelpOnly="true" showValueHelp="true" tokens="{CreateModelSet>/MaterialData}">
+						<tokens>
+							<Token key="{CreateModelSet>MaterialNum}" text="{CreateModelSet>MaterialDesc}" editable="false" select="onPressLoadPortDirty"/>
+						</tokens>
+					</MultiInput>
+					<Label text="{i18n>CustomerNumber}"></Label>
+					<MultiInput showValueStateMessage="false" placeholder="{i18n>select} {i18n>CustomerNumber}" valueHelpRequest="handleValueHelpCustomerNumber"
+						liveChange="liveChangeLoadPortDispPort" valueHelpOnly="true" showValueHelp="true" tokens="{CreateModelSet>/CustomerData}">
+						<tokens>
+							<Token key="{CreateModelSet>CustCode}" text="{CreateModelSet>Name1}" editable="false" select="onPressLoadPortDirty"/>
+						</tokens>
+					</MultiInput>
+					<Label text="{i18n>distributionChannel}"></Label>
+					<MultiInput showValueStateMessage="false" placeholder="{i18n>select} {i18n>distributionChannel}"
+						valueHelpRequest="handleValueHelpDistributionChannel" liveChange="liveChangeLoadPortDispPort" valueHelpOnly="true" showValueHelp="true"
+						tokens="{CreateModelSet>/DistributionChannelData}">
+						<tokens>
+							<Token key="{CreateModelSet>DistChl}" text="{CreateModelSet>Name}" editable="false" select="onPressLoadPortDirty"/>
+						</tokens>
+					</MultiInput>
+					
+						<Label text="{i18n>materialGroup}"></Label>
+					<MultiInput showValueStateMessage="false" placeholder="{i18n>select} {i18n>materialGroup}"
+						valueHelpRequest="handleValueHelpMaterialGroup" liveChange="liveChangeLoadPortDispPort" valueHelpOnly="true" showValueHelp="true"
+						tokens="{CreateModelSet>/MaterialGrpData}">
+						<tokens>
+							<Token key="{CreateModelSet>}" text="{CreateModelSet>}" editable="false" select="onPressLoadPortDirty"/>
+						</tokens>
+					</MultiInput>
+					
+						<Label text="{i18n>materialGroupOne}"></Label>
+					<MultiInput showValueStateMessage="false" placeholder="{i18n>select} {i18n>materialGroupOne}"
+						valueHelpRequest="handleValueHelpMaterialGroupOne" liveChange="liveChangeLoadPortDispPort" valueHelpOnly="true" showValueHelp="true"
+						tokens="{CreateModelSet>/MaterialGrpOneData}">
+						<tokens>
+							<Token key="{CreateModelSet>}" text="{CreateModelSet>}" editable="false" select="onPressLoadPortDirty"/>
+						</tokens>
+					</MultiInput>
+				</f:content>
+			</f:SimpleForm>
+		</content>
+		<buttons>
+			<Button text="{i18n>createUsBtn}" press="onPressCreateUserFrag" tooltip="{i18n>createUsBtn}"></Button>
+			<Button text="{i18n>cancel}" press="onPressCancelUserFrag" tooltip="{i18n>cancel}"></Button>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

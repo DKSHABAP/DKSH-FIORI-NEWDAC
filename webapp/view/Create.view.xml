@@ -1,0 +1,2681 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form"
+	controllerName="com.incture.cherrywork.newdac.controller.Create" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page navButtonPress="onBackFromCreateToUser" showNavButton="true" class="sapUiSizeCompact" id="ID_USER_PROV_CRT">
+		<!--<headerContent>-->
+		<!--	<Button icon="sap-icon://expand-group" tooltip="{i18n>expandPanelTooltip}" press="onPressExpandAll"/>-->
+		<!--	<Button icon="sap-icon://collapse-group" tooltip="{i18n>collapsePanelTooltip}" press="onPressCollapseAll"/>-->
+		<!--</headerContent>-->
+		<content>
+			<IconTabBar expandable="false" id="ID_TAB_BAR_PROV_APP" expanded="true" select="handleIconTabSelectChangeSelection">
+				<items>
+					<!--for Tracking Details-->
+					<IconTabFilter key="UserDetailsKey" text="{i18n>userDetails}">
+						<f:SimpleForm id="ID_PROV_SIMF_USER_DET" minWidth="1024" layout="ResponsiveGridLayout" title="" maxContainerCols="2" editable="true"
+							labelSpanL="4" labelSpanM="4" emptySpanL="0" emptySpanM="0" columnsL="2" columnsM="2" class="sapUiSizeCompact">
+							<f:content>
+								<core:Title></core:Title>
+								<Label text="{i18n>group}"/>
+								<MultiComboBox showValueStateMessage="false" placeholder="{i18n>Select} {i18n>group}" items="{GroupModelSet>/results}"
+									selectedKeys="{UserModelSet>/groupSelected}" selectionChange="onGroupSelectionChange" required="true"
+									valueState="{UserModelSet>/groupValueState}" enabled="{UpdateCreateIndModelViewSet>/EditableField}">
+									<core:Item key="{GroupModelSet>key}" text="{GroupModelSet>desc} ({GroupModelSet>key})"/>
+								</MultiComboBox>
+								<Label text="{i18n>firstName}"/>
+								<Input required="true" showValueStateMessage="false" value="{UserModelSet>/firstName}" valueState="{UserModelSet>/firstNameValueState}"
+									placeholder="{i18n>enter} {i18n>firstName}" maxLength="20" liveChange="liveChnageFirstName"
+									enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Input>
+								<Label text="{i18n>lastName}"/>
+								<Input required="true" liveChange="liveChnageLastName" showValueStateMessage="false" value="{UserModelSet>/lastName}"
+									valueState="{UserModelSet>/lastNameValueState}" placeholder="{i18n>enter} {i18n>lastName}" maxLength="20"
+									enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Input>
+								<core:Title></core:Title>
+								<Label text="{i18n>email}"/>
+								<Input value="{UserModelSet>/email}" showValueStateMessage="false" valueState="{UserModelSet>/emailValueState}"
+									placeholder="{i18n>enter} {i18n>email}" required="true" liveChange="liveChnageEmail" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Input>
+								<Label text="{i18n>phoneNo}"/>
+								<Input value="{UserModelSet>/phoneNo}" showValueStateMessage="false" placeholder="{i18n>enter} {i18n>phoneNo}"
+									liveChange="liveChangePhoneNo" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Input>
+								<Label text="{i18n>country}"/>
+								<ComboBox items="{oCountryModel>/results}" id="countryId" showValueStateMessage="false" placeholder="{i18n>select} {i18n>country}" required="true"
+									selectedKey="{UserModelSet>/selectedCountry}" valueState="{UserModelSet>/countryValueState}" change="onCountryChange"
+									enabled="{UpdateCreateIndModelViewSet>/EditableField}">
+									<core:Item key="{oCountryModel>key}" text="{oCountryModel>desc}"/>
+								</ComboBox>
+							</f:content>
+						</f:SimpleForm>
+					</IconTabFilter>
+					<IconTabFilter key="keyDataPrivillage" text="{i18n>dataPrivilegeIconFilter}" visible="false">
+						<Panel expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/SalesOrgPanel}" expand="onExpand">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="{i18n>salesOrganizationPanelText}" wrapping="true" design="Bold"></Label>
+									<ToolbarSpacer></ToolbarSpacer>
+									<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+									<Switch customTextOff="No" customTextOn="Yes" state="{SwitchOnOffSet>/SalesOrgSwitch}"
+										enabled="{UpdateCreateIndModelViewSet>/EditableField}" change="onChangeSwitchSalesOrganization"></Switch>
+								</Toolbar>
+							</headerToolbar>
+							<Table items="{SlaesOrgViewSet>/results}" id="ID_TBL_VIEW_PROV_SELS_ORG" fixedLayout="false" inset="false"
+								mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}">
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{i18n>salesOrganizationCountLbl}" id="ID_PROV_LBL_C_SALS_ORG" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Button type="Accept" icon="sap-icon://add" press="handleValueHelpSalesOrganization" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>salesId}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>salesName}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<Text></Text>
+										<Text text="{SlaesOrgViewSet>SalesOrg}"></Text>
+										<Text text="{SlaesOrgViewSet>Name}"></Text>
+										<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteSalsOrganization" enabled="{UpdateCreateIndModelViewSet>/EditableField}"/>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+						<!--Customer-->
+						<Panel expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/CustomerPanel}" expand="onExpand">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="{i18n>customerPanelText}" wrapping="true" design="Bold"></Label>
+									<ToolbarSpacer></ToolbarSpacer>
+									<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+									<Switch customTextOff="No" customTextOn="Yes" state="{SwitchOnOffSet>/CustomerSwitch}"
+										enabled="{UpdateCreateIndModelViewSet>/EditableField}" change="onChangeSwitchCustomerNumber"></Switch>
+								</Toolbar>
+							</headerToolbar>
+							<Table items="{CustomerNumViewSet>/results}" id="ID_TBL_VIEW_PROV_CUST_NUM" fixedLayout="false"
+								mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" inset="false">
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{i18n>customerLblCount}" id="ID_PROV_LBL_C_CUST_NUM" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Button type="Accept" icon="sap-icon://add" press="handleValueHelpCustomerNumber" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>custNumberTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>custNameTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<Text></Text>
+										<Text text="{CustomerNumViewSet>CustCode}"></Text>
+										<Text text="{CustomerNumViewSet>Name1}"></Text>
+										<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteCustomerNumber" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+						<!--Material -->
+						<Panel visible="false" expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/MaterialNumPanel}" expand="onExpand">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="{i18n>materialPanelText}" wrapping="true" design="Bold"></Label>
+									<ToolbarSpacer></ToolbarSpacer>
+									<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+									<Switch customTextOff="No" customTextOn="Yes" state="{SwitchOnOffSet>/MaterialNumSwitch}"
+										enabled="{UpdateCreateIndModelViewSet>/EditableField}" change="onChangeSwitchMaterialNo"></Switch>
+								</Toolbar>
+							</headerToolbar>
+							<Table items="{MaterialNumViewSet>/results}" id="ID_TBL_VIEW_PROV_MATERIAL_NUM" fixedLayout="false"
+								mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" inset="false">
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{i18n>materialNumberCountLbl}" id="ID_PROV_LBL_C_Mat_NUM" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Button type="Accept" icon="sap-icon://add" press="handleValueHelpMaterialNumber" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>materialNumberTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>materialNumberNameTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<Text></Text>
+										<Text text="{MaterialNumViewSet>}"></Text>
+										<Text text="{MaterialNumViewSet>}"></Text>
+										<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteMaterialNumber" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+						<!--Distribution Channel-->
+						<Panel expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/DistribuChanlPanel}" expand="onExpand">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="{i18n>distributionChannelPanelText}" wrapping="true" design="Bold"></Label>
+									<ToolbarSpacer></ToolbarSpacer>
+									<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+									<Switch customTextOff="No" customTextOn="Yes" state="{SwitchOnOffSet>/DistribuChanlSwitch}"
+										enabled="{UpdateCreateIndModelViewSet>/EditableField}" change="onChangeSwitchDistributionChanl"></Switch>
+								</Toolbar>
+							</headerToolbar>
+							<Table items="{DistributionChannelViewSet>/results}" id="ID_TBL_VIEW_PROV_DISTRU_CHANL"
+								mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{i18n>distributionChannelCountLbl}" id="ID_PROV_LBL_C_DISTRI_CHNL" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Button type="Accept" icon="sap-icon://add" press="handleValueHelpDistributionChannel"
+											enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>distributionIdTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>distributionNameTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<Text></Text>
+										<Text text="{DistributionChannelViewSet>DistChl}"></Text>
+										<Text text="{DistributionChannelViewSet>Name}"></Text>
+										<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteDistributionChannel"
+											enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+						<!--Material Group-->
+						<Panel expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/MaterialGrpPanel}" expand="onExpand">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="{i18n>materialGroupPanelText}" wrapping="true" design="Bold"></Label>
+									<ToolbarSpacer></ToolbarSpacer>
+									<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+									<Switch customTextOff="No" customTextOn="Yes" state="{SwitchOnOffSet>/MaterialGrpSwitch}"
+										enabled="{UpdateCreateIndModelViewSet>/EditableField}" change="onChangeSwitchMaterialGroup"></Switch>
+								</Toolbar>
+							</headerToolbar>
+							<Table items="{MaterialGrpViewSet>/results}" id="ID_TBL_VIEW_PROV_MAT_GRP_" fixedLayout="false"
+								mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" inset="false">
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{i18n>materialGroupCountLbl}" id="ID_PROV_LBL_C_MAT_GRP" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Button type="Accept" icon="sap-icon://add" press="handleValueHelpMaterialGroup" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>MaterialGroupIdTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>materialGroupNameTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<Text></Text>
+										<Text text="{MaterialGrpViewSet>Materialgroup}"></Text>
+										<Text text="{MaterialGrpViewSet>Matgroupdesc}"></Text>
+										<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteMaterialGroup" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+						<!--Material Group One-->
+						<Panel visible="false" expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/MaterialGrpOnePanel}" expand="onExpand">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="{i18n>materialGroupOnePanelText}" wrapping="true" design="Bold"></Label>
+									<ToolbarSpacer></ToolbarSpacer>
+									<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+									<Switch customTextOff="No" customTextOn="Yes" state="{SwitchOnOffSet>/MaterialGrpOneSwitch}"
+										enabled="{UpdateCreateIndModelViewSet>/EditableField}" change="onChangeSwitchMaterialGroupOne"></Switch>
+								</Toolbar>
+							</headerToolbar>
+							<Table items="{MaterialGrpOneViewSet>/results}" id="ID_TBL_VIEW_PROV_MAT_GRP_ONE"
+								mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{i18n>materialGroupOneCountLbl}" id="ID_PROV_LBL_C_MAT_GRP_ONE" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Button type="Accept" icon="sap-icon://add" press="handleValueHelpMaterialGroupOne" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>MaterialGroupOneIdTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>materialGroupOneNameTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<Text></Text>
+										<Text text="{MaterialGrpOneViewSet>MaterialGroup1}"></Text>
+										<Text text="{MaterialGrpOneViewSet>MatGroup1Desc}"></Text>
+										<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteMaterialGroupOne" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+						<!--Material 4-->
+						<Panel expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/MaterialGrp4Panel}" expand="4xpand">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="{i18n>materialGroup4PanelText}" wrapping="true" design="Bold"></Label>
+									<ToolbarSpacer></ToolbarSpacer>
+									<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+									<Switch customTextOff="No" customTextOn="Yes" state="{SwitchOnOffSet>/MaterialGrp4Switch}"
+										enabled="{UpdateCreateIndModelViewSet>/EditableField}" change="onChangeSwitchMaterialGroup4"></Switch>
+								</Toolbar>
+							</headerToolbar>
+							<Table items="{MaterialGrp4ViewSet>/results}" id="ID_TBL_VIEW_PROV_MAT_GRP_4"
+								mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{i18n>materialGroup4CountLbl}" id="ID_PROV_LBL_C_MAT_GRP_4" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Button type="Accept" icon="sap-icon://add" press="handleValueHelpMaterialGroup4" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>MaterialGroup4IdTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>materialGroup4NameTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<Text></Text>
+										<Text text="{MaterialGrp4ViewSet>Materialgroup4}"></Text>
+										<Text text="{MaterialGrp4ViewSet>Matgroup4desc}"></Text>
+										<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteMaterialGroup4" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+						<!--District-->
+						<Panel expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/DistrictPanel}" expand="onExpand">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="{i18n>districtPanelText}" wrapping="true" design="Bold"></Label>
+									<ToolbarSpacer></ToolbarSpacer>
+									<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+									<Switch customTextOff="No" customTextOn="Yes" state="{SwitchOnOffSet>/DistrictSwitch}"
+										enabled="{UpdateCreateIndModelViewSet>/EditableField}" change="onChangeSwitchDistrict"></Switch>
+								</Toolbar>
+							</headerToolbar>
+							<Table items="{DistrictViewSet>/results}" id="ID_TBL_VIEW_PROV_DISTRICT"
+								mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{i18n>distrcitCountLbl}" id="ID_PROV_LBL_C_MAT_DISTRCT" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Button type="Accept" icon="sap-icon://add" press="handleValueHelpDistrcitt" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>districtIdTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>districtNameTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<Text></Text>
+										<Text text="{DistrictViewSet>Division}"></Text>
+										<Text text="{DistrictViewSet>Name}"></Text>
+										<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteDistrict" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+					</IconTabFilter>
+					<IconTabFilter key="POKey" text="{i18n>dataPrivilegeIconFilter}" visible="{UpdateCreateIndModelViewSet>/showPO}">
+						<List id="idPODisp" items="{path: 'oPOUserTabModel>/results'}">
+							<CustomListItem>
+								<Panel expandable="true" headerText="{oPOUserTabModel>domainCode}-{oPOUserTabModel>domainText}" width="auto" class="sapUiResponsiveMargin"
+									expand="onExpandPO" expanded="false">
+									<content>
+										<Toolbar id="toolbar3">
+											<ToolbarSpacer/>
+											<Label text="Assign all rights to all attributes" wrapping="true" design="Bold"></Label>
+											<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>AllSwitch}" change="onChangeSwitchforAll" enabled="false"></Switch>
+											<layoutData>
+												<ToolbarLayoutData shrinkable="true" maxWidth="400px"/>
+											</layoutData>
+										</Toolbar>
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>salesOrganizationPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>SalesOrgSwitch1}" enabled="false"
+														change="onChangeSwitchSalesOrganization"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<!--	<Table items="{path:'SlaesOrgViewSet>/results', templateShareable : false }" id="ID_TBL_VIEW_PROV_SELS_ORG1" fixedLayout="false" inset="false" mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}">-->
+											<!--	<Table items="{path:'oPOUserModel>projects/results', templateShareable : true }" id="ID_TBL_VIEW_PROV_SELS_ORG1" fixedLayout="false" inset="false" mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}">-->
+											<Table items="{path:'oPOUserTabModel>salesOrg1', templateShareable : true }" id="ID_TBL_VIEW_PROV_SELS_ORG1" fixedLayout="false"
+												inset="false" mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}">
+												<headerToolbar>
+													<Toolbar>
+														<Label text="{i18n>salesOrganizationCountLbl}" id="ID_PROV_LBL_C_SALS_ORG1" design="Bold"></Label>
+														<ToolbarSpacer></ToolbarSpacer>
+														<!--	<Button type="Accept" icon="sap-icon://add" press="handleValueHelpSalesOrganization" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>-->
+													</Toolbar>
+												</headerToolbar>
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>salesId}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>salesName}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOUserTabModel>attributeValue}"></Text>
+														<Text text="{oPOUserTabModel>attributeText}"></Text>
+														<CheckBox selected="false" editable="false"/>
+														<!--	<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteSalsOrganization" enabled="false"/>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Customer-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>customerPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>CustomerSwitch1}" enabled="false"
+														change="onChangeSwitchCustomerNumber"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>custNum1', templateShareable : true }" id="ID_TBL_VIEW_PROV_CUST_NUM1" fixedLayout="false"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" inset="false">
+												<headerToolbar>
+													<Toolbar>
+														<Label text="{i18n>customerLblCount}" id="ID_PROV_LBL_C_CUST_NUM1" design="Bold"></Label>
+														<ToolbarSpacer></ToolbarSpacer>
+														<!--	<Button type="Accept" icon="sap-icon://add"  enabled="false"></Button>-->
+													</Toolbar>
+												</headerToolbar>
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>custNumberTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>custNameTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOUserTabModel>attributeValue}"></Text>
+														<Text text="{oPOUserTabModel>attributeText}"></Text>
+														<CheckBox selected="true" editable="false"/>
+														<!--	<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteCustomerNumber" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Distribution Channel-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>distributionChannelPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>DistribuChanlSwitch1}" enabled="false"
+														change="onChangeSwitchDistributionChanl"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>distriChanne1', templateShareable : true }" id="ID_TBL_VIEW_PROV_DISTRU_CHANL1"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<headerToolbar>
+													<Toolbar>
+														<Label text="{i18n>distributionChannelCountLbl}" id="ID_PROV_LBL_C_DISTRI_CHNL1" design="Bold"></Label>
+														<ToolbarSpacer></ToolbarSpacer>
+														<!--		<Button type="Accept" icon="sap-icon://add" press="handleValueHelpDistributionChannel" enabled="false"></Button>-->
+													</Toolbar>
+												</headerToolbar>
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>distributionIdTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>distributionNameTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOUserTabModel>attributeValue}"></Text>
+														<Text text="{oPOUserTabModel>attributeText}"></Text>
+														<CheckBox selected="false" editable="false"/>
+														<!--	<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteDistributionChannel" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Material Group-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>materialGroupPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>MaterialGrpSwitch1}" enabled="false"
+														change="onChangeSwitchMaterialGroup"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>materialGrp1', templateShareable : true }" id="ID_TBL_VIEW_PROV_MAT_GRP1_" fixedLayout="false"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" inset="false">
+												<headerToolbar>
+													<Toolbar>
+														<Label text="{i18n>materialGroupCountLbl}" id="ID_PROV_LBL_C_MAT_GRP1" design="Bold"></Label>
+														<ToolbarSpacer></ToolbarSpacer>
+														<!--	<Button type="Accept" icon="sap-icon://add" press="handleValueHelpMaterialGroup" enabled="false"></Button>-->
+													</Toolbar>
+												</headerToolbar>
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MaterialGroupIdTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>materialGroupNameTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOUserTabModel>attributeValue}"></Text>
+														<Text text="{oPOUserTabModel>attributeText}"></Text>
+														<CheckBox selected="false" editable="false"/>
+														<!--	<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteMaterialGroup" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Material Group One-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>materialGroupOnePanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>MaterialGrpOneSwitch1}" enabled="false"
+														change="onChangeSwitchMaterialGroupOne"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>materialGrpOne1', templateShareable : true }" id="ID_TBL_VIEW_PROV_MAT_GRP_ONE1"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<headerToolbar>
+													<Toolbar>
+														<Label text="{i18n>materialGroupOneCountLbl}" id="ID_PROV_LBL_C_MAT_GRP_ONE1" design="Bold"></Label>
+														<ToolbarSpacer></ToolbarSpacer>
+														<!--	<Button type="Accept" icon="sap-icon://add" press="handleValueHelpMaterialGroupOne" enabled="false"></Button>-->
+													</Toolbar>
+												</headerToolbar>
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MaterialGroupOneIdTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>materialGroupOneNameTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOUserTabModel>attributeValue}"></Text>
+														<Text text="{oPOUserTabModel>attributeText}"></Text>
+														<CheckBox selected="false" editable="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteMaterialGroupOne" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Material 4-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="4xpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>materialGroup4PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>MaterialGrp4Switch1}" enabled="false"
+														change="onChangeSwitchMaterialGroup4"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>materialGrp41', templateShareable : true }" id="ID_TBL_VIEW_PROV_MAT_GRP_41"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<headerToolbar>
+													<Toolbar>
+														<Label text="{i18n>materialGroup4CountLbl}" id="ID_PROV_LBL_C_MAT_GRP_41" design="Bold"></Label>
+														<ToolbarSpacer></ToolbarSpacer>
+														<!--	<Button type="Accept" icon="sap-icon://add" press="handleValueHelpMaterialGroup4" enabled="false"></Button>-->
+													</Toolbar>
+												</headerToolbar>
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MaterialGroup4IdTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>materialGroup4NameTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOUserTabModel>attributeValue}"></Text>
+														<Text text="{oPOUserTabModel>attributeText}"></Text>
+														<CheckBox selected="false" editable="false"/>
+														<!--	<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteMaterialGroup4" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--District-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>districtPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>DistrictSwitch1}" enabled="false" change="onChangeSwitchDistrict"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>division', templateShareable : true }" id="ID_TBL_VIEW_PROV_DISTRICT1"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<headerToolbar>
+													<Toolbar>
+														<Label text="{i18n>distrcitCountLbl}" id="ID_PROV_LBL_C_MAT_DISTRCT1" design="Bold"></Label>
+														<ToolbarSpacer></ToolbarSpacer>
+														<!--<Button type="Accept" icon="sap-icon://add" press="handleValueHelpDistrcitt" enabled="false"></Button>-->
+													</Toolbar>
+												</headerToolbar>
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>districtIdTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>districtNameTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOUserTabModel>attributeValue}"></Text>
+														<Text text="{oPOUserTabModel>attributeText}"></Text>
+														<CheckBox selected="false" editable="false"/>
+														<!--	<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteDistrict" enabled="false"></Button>	-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Plant-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>plantPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>PlantSwitch}" enabled="false" change="onChangeSwitchPlant"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>plant', templateShareable : true }" id="ID_TBL_VIEW_PROV_PLANT"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>plantIdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>plantNameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOUserTabModel>attributeValue}"></Text>
+														<Text text="{oPOUserTabModel>attributeText}"></Text>
+														<CheckBox enabled="false" selected="false"/>
+														<!--	<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Order Type-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>orderTypePanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>OrderTypeSwitch}" enabled="false" change="onChangeSwitchOrderType"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>ordertype', templateShareable : true }" id="idOt" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>OrderTypeIdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>OrderTypeNameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOUserTabModel>attributeValue}"></Text>
+														<Text text="{oPOUserTabModel>attributeText}"></Text>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject"  enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Country-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>countryPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>CountrySwitch}" enabled="false" change="onChangeCountry"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>country', templateShareable : true }" id="idCountry"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CountryIdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CountryNameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOUserTabModel>attributeValue}"></Text>
+														<Text text="{oPOUserTabModel>attributeText}"></Text>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Storage Location-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>storLocPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>StorageLocSwitch}" enabled="false" change="onChangeSwitchStorLoc"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>storloc', templateShareable : true }" id="idStorloc"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>storLocIdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>storLocNameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOUserTabModel>attributeValue}"></Text>
+														<Text text="{oPOUserTabModel>attributeText}"></Text>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Material Group Two-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>MatGrp2PanelText} " wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>MatGrp2Switch}" enabled="false" change="onChangeSwitchMatGrp2"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>materialGrp2', templateShareable : true }" id="idMatGrp2"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MatGrp2Idlbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MatGrp2Namelbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Material Group Three-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>MatGrp3PanelText} " wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>MatGrp3Switch}" enabled="false" change="onChangeSwitchMatGrp3"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>materialGrp3', templateShareable : true }" id="idMatGrp3"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MatGrp3Idlbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MatGrp3Namelbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Material Group Five-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>MatGrp5PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>MatGrp5Switch}" enabled="false" change="onChangeSwitchMatGrp5"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>materialGrp5', templateShareable : true }" id="idMatGrp5"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MatGrp5Idlbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MatGrp5Namelbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Product hierarchy 1-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>ProdHrch1PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>ProdHierarchy1Switch}" enabled="false"
+														change="onChangeSwitchProdHierarchy1"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>prodhierarchy1', templateShareable : true }" id="idProdhierarchy1"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch1IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch1NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Product hierarchy 2-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>ProdHrch2PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>ProdHierarchy2Switch}" enabled="false"
+														change="onChangeSwitchProdHierarchy2"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>prodhierarchy2', templateShareable : true }" id="idProdhierarchy2"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch2IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch2NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Product hierarchy 3-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>ProdHrch3PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>ProdHierarchy3Switch}" enabled="false"
+														change="onChangeSwitchProdHierarchy3"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>prodhierarchy3', templateShareable : true }" id="idProdhierarchy3"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch3IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch3NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Product hierarchy 4-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>ProdHrch4PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>ProdHierarchy4Switch}" enabled="false"
+														change="onChangeSwitchProdHierarchy4"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>prodhierarchy4', templateShareable : true }" id="idProdhierarchy4"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch4IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch4NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Product hierarchy 5-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>ProdHrch5PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>ProdHierarchy5Switch}" enabled="false"
+														change="onChangeSwitchProdHierarchy5"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>prodhierarchy5', templateShareable : true }" id="idProdhierarchy5"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch5IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch5NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Product hierarchy 6-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>ProdHrch6PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>ProdHierarchy6Switch}" enabled="false"
+														change="onChangeSwitchProdHierarchy6"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>prodhierarchy6', templateShareable : true }" id="idProdhierarchy6"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch6IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch6NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Product hierarchy 7-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>ProdHrch7PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>ProdHierarchy7Switch}" enabled="false"
+														change="onChangeSwitchProdHierarchy7"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>prodhierarchy7', templateShareable : true }" id="idProdhierarchy7"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch7IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch7NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Customer Group-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>CusGrpPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>CustomerGrpSwitch}" enabled="false" change="onChangeSwitchCustomerGrp"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>cusgrp', templateShareable : true }" id="idCusGrp"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrpIdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrpNameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Customer Group One-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>CusGrp1PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>CustomerGrp1Switch}" enabled="false"
+														change="onChangeSwitchCustomerGrp1"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>cusgrp1', templateShareable : true }" id="idCusGrp1"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp1IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp1NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Customer Group Two-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>CusGrp2PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>CustomerGrp2Switch}" enabled="false"
+														change="onChangeSwitchCustomerGrp2"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>cusgrp2', templateShareable : true }" id="idCusGrp2"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp2IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp2NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Customer Group Three-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>CusGrp3PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>CustomerGrp3Switch}" enabled="false"
+														change="onChangeSwitchCustomerGrp3"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>cusgrp3', templateShareable : true }" id="idCusGrp3"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp3IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp3NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Customer Group Four-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>CusGrp4PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>CustomerGrp4Switch}" enabled="false"
+														change="onChangeSwitchCustomerGrp4"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>cusgrp4', templateShareable : true }" id="idCusGrp4"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp4IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp4NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Customer Group Five-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>CusGrp5PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>CustomerGrp5Switch}" enabled="false"
+														change="onChangeSwitchCustomerGrp5"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>cusgrp5', templateShareable : true }" id="idCusGrp5"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp5IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp5NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--District-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>District1PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>District1Switch}" enabled="false" change="onChangeSwitchDistrict1"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>district1', templateShareable : true }" id="idDist"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>District1IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>District1NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOUserTabModel>attributeValue}"></Text>
+														<Text text="{oPOUserTabModel>attributeText}"></Text>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Material-->
+										<Panel expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/MatPanel}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>MaterialPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{oPOUserTabModel>MaterialSwitch}" enabled="false" change="onChangeSwitchMaterial"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOUserTabModel>material', templateShareable : true }" id="idMaterial"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MaterialIdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MaterialNameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOUserTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOUserTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="true"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+									</content>
+								</Panel>
+							</CustomListItem>
+						</List>
+					</IconTabFilter>
+					<IconTabFilter key="PODetailsKey" text="{i18n>po}" visible="{UpdateCreateIndModelViewSet>/showPO}">
+						<List items="{path: 'oPOTabModel>/results'}">
+							<CustomListItem>
+								<Panel expandable="true" headerText="{oPOTabModel>permissionObjectText}" width="auto" class="sapUiResponsiveMargin" expand="onExpandPOUser"
+									expanded="false">
+									<content>
+										<Toolbar>
+											<ToolbarSpacer/>
+											<Label text="Assign all rights to all attributes" wrapping="true" design="Bold"></Label>
+											<Switch customTextOff="No" customTextOn="Yes" state="{oPOTabModel>AllSwitch}" enabled="false"></Switch>
+											<layoutData>
+												<ToolbarLayoutData shrinkable="true" maxWidth="400px"/>
+											</layoutData>
+										</Toolbar>
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>salesOrg1',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>salesOrganizationPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>salesOrg1',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchSalesOrganization"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<!--	<Table items="{path:'SlaesOrgViewSet>/results', templateShareable : false }" id="ID_TBL_VIEW_PROV_SELS_ORG1" fixedLayout="false" inset="false" mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}">-->
+											<!--	<Table items="{path:'oPOUserModel>projects/results', templateShareable : true }" id="ID_TBL_VIEW_PROV_SELS_ORG1" fixedLayout="false" inset="false" mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}">-->
+											<Table items="{path:'oPOTabModel>salesOrg1', templateShareable : true }" fixedLayout="false" inset="false"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}">
+												<headerToolbar>
+													<Toolbar>
+														<Label text="{i18n>salesOrganizationCountLbl}" design="Bold"></Label>
+														<ToolbarSpacer></ToolbarSpacer>
+														<!--	<Button type="Accept" icon="sap-icon://add" press="handleValueHelpSalesOrganization" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>-->
+													</Toolbar>
+												</headerToolbar>
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>salesId}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>salesName}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOTabModel>attributeValue}"></Text>
+														<Text text="{oPOTabModel>attributeText}"></Text>
+														<CheckBox selected="false" editable="false"/>
+														<!--	<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteSalsOrganization" enabled="false"/>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Customer-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>custNum1',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>customerPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>custNum1',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchCustomerNumber"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>custNum1', templateShareable : true }" fixedLayout="false"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" inset="false">
+												<headerToolbar>
+													<Toolbar>
+														<Label text="{i18n>customerLblCount}" design="Bold"></Label>
+														<ToolbarSpacer></ToolbarSpacer>
+														<!--	<Button type="Accept" icon="sap-icon://add"  enabled="false"></Button>-->
+													</Toolbar>
+												</headerToolbar>
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>custNumberTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>custNameTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOTabModel>attributeValue}"></Text>
+														<Text text="{oPOTabModel>attributeText}"></Text>
+														<CheckBox selected="true" editable="false"/>
+														<!--	<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteCustomerNumber" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Distribution Channel-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>distriChanne1',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>distributionChannelPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>distriChanne1',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchDistributionChanl"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>distriChanne1', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<headerToolbar>
+													<Toolbar>
+														<Label text="{i18n>distributionChannelCountLbl}" design="Bold"></Label>
+														<ToolbarSpacer></ToolbarSpacer>
+														<!--		<Button type="Accept" icon="sap-icon://add" press="handleValueHelpDistributionChannel" enabled="false"></Button>-->
+													</Toolbar>
+												</headerToolbar>
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>distributionIdTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>distributionNameTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOTabModel>attributeValue}"></Text>
+														<Text text="{oPOTabModel>attributeText}"></Text>
+														<CheckBox selected="false" editable="false"/>
+														<!--	<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteDistributionChannel" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Material Group-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>materialGrp1',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>materialGroupPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>materialGrp1',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchMaterialGroup"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>materialGrp1', templateShareable : true }" fixedLayout="false"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" inset="false">
+												<headerToolbar>
+													<Toolbar>
+														<Label text="{i18n>materialGroupCountLbl}" design="Bold"></Label>
+														<ToolbarSpacer></ToolbarSpacer>
+														<!--	<Button type="Accept" icon="sap-icon://add" press="handleValueHelpMaterialGroup" enabled="false"></Button>-->
+													</Toolbar>
+												</headerToolbar>
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MaterialGroupIdTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>materialGroupNameTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOTabModel>attributeValue}"></Text>
+														<Text text="{oPOTabModel>attributeText}"></Text>
+														<CheckBox selected="false" editable="false"/>
+														<!--	<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteMaterialGroup" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Material Group One-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>materialGrpOne1',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>materialGroupOnePanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>materialGrpOne1',formatter:'.formatter.switchState'}"
+														enabled="false" change="onChangeSwitchMaterialGroupOne"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>materialGrpOne1', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<headerToolbar>
+													<Toolbar>
+														<Label text="{i18n>materialGroupOneCountLbl}" design="Bold"></Label>
+														<ToolbarSpacer></ToolbarSpacer>
+														<!--	<Button type="Accept" icon="sap-icon://add" press="handleValueHelpMaterialGroupOne" enabled="false"></Button>-->
+													</Toolbar>
+												</headerToolbar>
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MaterialGroupOneIdTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>materialGroupOneNameTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOTabModel>attributeValue}"></Text>
+														<Text text="{oPOTabModel>attributeText}"></Text>
+														<CheckBox selected="false" editable="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteMaterialGroupOne" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Material 4-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="4xpand"
+											visible="{path:'oPOTabModel>materialGrp41',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>materialGroup4PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>materialGrp41',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchMaterialGroup4"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>materialGrp41', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<headerToolbar>
+													<Toolbar>
+														<Label text="{i18n>materialGroup4CountLbl}" design="Bold"></Label>
+														<ToolbarSpacer></ToolbarSpacer>
+														<!--	<Button type="Accept" icon="sap-icon://add" press="handleValueHelpMaterialGroup4" enabled="false"></Button>-->
+													</Toolbar>
+												</headerToolbar>
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MaterialGroup4IdTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>materialGroup4NameTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOTabModel>attributeValue}"></Text>
+														<Text text="{oPOTabModel>attributeText}"></Text>
+														<CheckBox selected="false" editable="false"/>
+														<!--	<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteMaterialGroup4" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--District-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>division',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>districtPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>division',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchDistrict"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>division', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<headerToolbar>
+													<Toolbar>
+														<Label text="{i18n>distrcitCountLbl}" design="Bold"></Label>
+														<ToolbarSpacer></ToolbarSpacer>
+														<!--<Button type="Accept" icon="sap-icon://add" press="handleValueHelpDistrcitt" enabled="false"></Button>-->
+													</Toolbar>
+												</headerToolbar>
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>districtIdTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>districtNameTblText}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOTabModel>attributeValue}"></Text>
+														<Text text="{oPOTabModel>attributeText}"></Text>
+														<CheckBox selected="false" editable="false"/>
+														<!--	<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteDistrict" enabled="false"></Button>	-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Plant-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand" visible="{path:'oPOTabModel>plant',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>plantPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>plant',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchPlant"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>plant', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>plantIdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>plantNameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOTabModel>attributeValue}"></Text>
+														<Text text="{oPOTabModel>attributeText}"></Text>
+														<CheckBox enabled="false" selected="false"/>
+														<!--	<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Order Type-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>ordertype',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>orderTypePanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>ordertype',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchOrderType"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>ordertype', templateShareable : true }" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>OrderTypeIdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>OrderTypeNameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOTabModel>attributeValue}"></Text>
+														<Text text="{oPOTabModel>attributeText}"></Text>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject"  enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Country-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>country',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>countryPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>country',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeCountry"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>country', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CountryIdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CountryNameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOTabModel>attributeValue}"></Text>
+														<Text text="{oPOTabModel>attributeText}"></Text>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Storage Location-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>storloc',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>storLocPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>storloc',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchStorLoc"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>storloc', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>storLocIdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>storLocNameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOTabModel>attributeValue}"></Text>
+														<Text text="{oPOTabModel>attributeText}"></Text>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Material Group Two-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>materialGrp2',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>MatGrp2PanelText} " wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>materialGrp2',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchMatGrp2"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>materialGrp2', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MatGrp2Idlbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MatGrp2Namelbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Material Group Three-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>materialGrp3',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>MatGrp3PanelText} " wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>materialGrp3',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchMatGrp3"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>materialGrp3', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MatGrp3Idlbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MatGrp3Namelbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Material Group Five-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>materialGrp5',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>MatGrp5PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>materialGrp5',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchMatGrp5"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>materialGrp5', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MatGrp5Idlbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MatGrp5Namelbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Product hierarchy 1-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>prodhierarchy1',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>ProdHrch1PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>prodhierarchy1',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchProdHierarchy1"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>prodhierarchy1', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch1IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch1NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Product hierarchy 2-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>prodhierarchy2',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>ProdHrch2PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>prodhierarchy2',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchProdHierarchy2"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>prodhierarchy2', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch2IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch2NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Product hierarchy 3-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>prodhierarchy3',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>ProdHrch3PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>prodhierarchy3',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchProdHierarchy3"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>prodhierarchy3', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch3IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch3NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Product hierarchy 4-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>prodhierarchy4',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>ProdHrch4PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>prodhierarchy4',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchProdHierarchy4"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>prodhierarchy4', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch4IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch4NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Product hierarchy 5-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>prodhierarchy5',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>ProdHrch5PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>prodhierarchy5',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchProdHierarchy5"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>prodhierarchy5', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch5IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch5NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Product hierarchy 6-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>prodhierarchy6',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>ProdHrch6PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>prodhierarchy6',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchProdHierarchy6"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>prodhierarchy6', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch6IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch6NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Product hierarchy 7-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>prodhierarchy7',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>ProdHrch7PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>prodhierarchy7',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchProdHierarchy7"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>prodhierarchy7', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch7IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>ProdHrch7NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Customer Group-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>cusgrp',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>CusGrpPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>cusgrp',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchCustomerGrp"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>cusgrp', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrpIdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrpNameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Customer Group One-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>cusgrp1',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>CusGrp1PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>cusgrp1',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchCustomerGrp1"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>cusgrp1', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp1IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp1NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Customer Group Two-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>cusgrp2',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>CusGrp2PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>cusgrp2',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchCustomerGrp2"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>cusgrp2', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp2IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp2NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Customer Group Three-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>cusgrp3',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>CusGrp3PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>cusgrp3',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchCustomerGrp3"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>cusgrp3', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp3IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp3NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Customer Group Four-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>cusgrp4',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>CusGrp4PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>cusgrp4',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchCustomerGrp4"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>cusgrp4', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp4IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp4NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Customer Group Five-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>cusgrp5',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>CusGrp5PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>cusgrp5',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchCustomerGrp5"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>cusgrp5', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp5IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>CusGrp5NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--District-->
+										<Panel expandable="true" class="sapUiSizeCompact" expand="onExpand"
+											visible="{path:'oPOTabModel>district1',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>District1PanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>district1',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchDistrict1"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>district1', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>District1IdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>District1NameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Text text="{oPOTabModel>attributeValue}"></Text>
+														<Text text="{oPOTabModel>attributeText}"></Text>
+														<CheckBox enabled="false" selected="false"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+										<!--Material-->
+										<Panel expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/MatPanel}"
+											visible="{path:'oPOTabModel>material',formatter:'.formatter.panelVisible'}">
+											<headerToolbar>
+												<Toolbar>
+													<Label text="{i18n>MaterialPanelText}" wrapping="true" design="Bold"></Label>
+													<ToolbarSpacer></ToolbarSpacer>
+													<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+													<Switch customTextOff="No" customTextOn="Yes" state="{path:'oPOTabModel>material',formatter:'.formatter.switchState'}" enabled="false"
+														change="onChangeSwitchMaterial"></Switch>
+												</Toolbar>
+											</headerToolbar>
+											<Table items="{path:'oPOTabModel>material', templateShareable : true }"
+												mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}" fixedLayout="false" inset="false">
+												<columns>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MaterialIdLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>MaterialNameLbl}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+														<Label text="{i18n>exclusion}" design="Bold"/>
+													</Column>
+													<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<Text></Text>
+														<Input editable="false" value="{oPOTabModel>attributeValue}"></Input>
+														<Input editable="false" value="{oPOTabModel>attributeText}"></Input>
+														<CheckBox enabled="false" selected="true"/>
+														<!--<Button icon="sap-icon://delete" type="Reject" press="onPressDeletePlant" enabled="false"></Button>-->
+													</ColumnListItem>
+												</items>
+											</Table>
+										</Panel>
+									</content>
+								</Panel>
+							</CustomListItem>
+						</List>
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+		</content>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer></ToolbarSpacer>
+				<Button icon="sap-icon://create" type="Accept" text="{i18n>createUsBtn}" press="onPressCreateUserFrag" visible="{UpdateCreateIndModelViewSet>/Create}"></Button>
+				<Button icon="sap-icon://upload" type="Accept" text="{i18n>updateBtnTxt}" press="onPressUpdateUserFrag" visible="{UpdateCreateIndModelViewSet>/Update}"></Button>
+				<Button icon="sap-icon://reset" type="Reject" text="{i18n>cancel}" press="onUserCancel" visible="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

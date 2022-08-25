@@ -1,0 +1,44 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+	<Dialog contentWidth="70%" title="{i18n>changeUserTitle}">
+		<content>
+			<f:SimpleForm minWidth="1024" layout="ResponsiveGridLayout" title="" maxContainerCols="2" editable="true" labelSpanL="4" labelSpanM="4"
+				emptySpanL="0" emptySpanM="0" columnsL="2" columnsM="2" class="sapUiSizeCompact">
+				<f:content>
+					<core:Title></core:Title>
+					<Label text="{i18n>userId}"/>
+					<Input value="{UpdateModelSet>/id}" tooltip="{UpdateModelSet>/id}" enabled="false"></Input>
+					<Label text="{i18n>group}"/>
+					<MultiComboBox showValueStateMessage="false" placeholder="{i18n>Select} {i18n>group}" items="{GroupModelSet>/results}"
+						selectedKeys="{UpdateModelSet>/groupSelected}" selectionChange="onGroupSelectionChange" required="true"
+						valueState="{UpdateModelSet>/groupValueState}">
+						<core:Item key="{GroupModelSet>key}" text="{GroupModelSet>desc} ({GroupModelSet>key})"/>
+					</MultiComboBox>
+					<Label text="{i18n>firstName}"/>
+					<Input required="true" showValueStateMessage="false" tooltip="{UpdateModelSet>/firstName}" value="{UpdateModelSet>/firstName}"
+						valueState="{UpdateModelSet>/firstNameValueState}" placeholder="{i18n>enter} {i18n>firstName}" maxLength="20"
+						liveChange="liveChnageFirstName"></Input>
+					<Label text="{i18n>lastName}"/>
+					<Input required="true" liveChange="liveChnageLastName" showValueStateMessage="false" tooltip="{UpdateModelSet>/lastName}"
+						value="{UpdateModelSet>/lastName}" valueState="{UpdateModelSet>/lastNameValueState}" placeholder="{i18n>enter} {i18n>lastName}"
+						maxLength="20"></Input>
+					<core:Title></core:Title>
+					<Label text="{i18n>email}"/>
+					<Input value="{UpdateModelSet>/email}" tooltip="{UpdateModelSet>/email}" showValueStateMessage="false"
+						valueState="{UpdateModelSet>/emailValueState}" placeholder="{i18n>enter} {i18n>email}" required="true" liveChange="liveChnageEmail"></Input>
+					<Label text="{i18n>phoneNo}"/>
+					<Input value="{UpdateModelSet>/phoneNo}" tooltip="{UpdateModelSet>/phoneNo}" showValueStateMessage="false"
+						placeholder="{i18n>enter} {i18n>phoneNo}" liveChange="liveChangePhoneNo"></Input>
+					<Label text="{i18n>country}"/>
+					<ComboBox items="{oCountryModel>/results}" showValueStateMessage="false" placeholder="{i18n>select} {i18n>country}" required="true"
+						selectedKey="{UpdateModelSet>/selectedCountry}" valueState="{UpdateModelSet>/countryValueState}" change="onCountryChange">
+						<core:Item key="{oCountryModel>key}" text="{oCountryModel>desc}"/>
+					</ComboBox>
+				</f:content>
+			</f:SimpleForm>
+		</content>
+		<buttons>
+			<Button text="{i18n>changeUpdBtn}" press="onPressUpdateUserFrag" tooltip="{i18n>changeUpdBtn}"></Button>
+			<Button text="{i18n>cancel}" press="onPressCancelUpdateUserFrag" tooltip="{i18n>cancel}"></Button>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,12 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+		<Dialog  title="Copy POs To Users" ><content>
+			<MultiComboBox width="500px" id="imul" selectionFinish="handleSelectionFinish" items="{/UserIds}">
+			<core:Item key="{}" text="{}"/>
+		</MultiComboBox></content>
+			<buttons>
+			
+			<Button text="Cancel" press="onPressCancelFrg" ></Button>
+			<Button text="Confirm" press="onPressCopyUsers" ></Button>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

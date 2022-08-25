@@ -1,0 +1,14 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog title="Select Domain to Dowload" class="sapUiSizeCompact">
+		<content>
+				<List items="{domainModel>/items}">
+					<items>
+						<StandardListItem title="{domainModel>domainCode}" info="{domainModel>domainText}" type="Active" press="onDownloadFrag"></StandardListItem>
+					</items>
+				</List>
+		</content>
+		<buttons>
+			<Button text="Cancel" press="onCancelFrag"></Button>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

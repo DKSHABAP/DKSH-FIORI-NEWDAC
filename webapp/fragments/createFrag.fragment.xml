@@ -1,0 +1,49 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog title="Select Permission Attributes" class="sapUiSizeCompact">
+		<content>
+			<HBox>
+				<Label text="Module:" design="Bold" class="sapUiTinyMarginBegin sapUiTinyMarginTop"></Label>
+				<Select forceSelection="false" items="{domainModel>/items}" class="sapUiSizeCompact sapUiTinyMarginBegin" width="9rem"
+					change="onCreateDomainSelect">
+					<core:Item key="{domainModel>domainText}" text="{domainModel>domainCode}"/>
+				</Select>
+			</HBox>
+			<Label text="Name:" design="Bold" class="sapUiTinyMarginBegin sapUiTinyMarginTop"></Label>
+			<Text text="{domainModel>/domainName}" class="sapUiTinyMarginTop sapUiTinyMarginBegin"></Text>
+			<!--<List mode="MultiSelect" class="sapUiSmallMarginTop" items="{domainModel>/attributes}">-->
+			<!--	<StandardListItem title="{domainModel>attributeId}" info="{domainModel>attributeDesc}"/>-->
+			<Table items="{domainModel>/attributes}" mode="MultiSelect" width="20rem" visible="{path:'domainModel>/attributes',formatter:'.formatter.lengthVisible'}">
+				<columns>
+					<Column>
+						<Text/>
+					</Column>
+					<Column>
+						<Text/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text text="{domainModel>attributeId}"></Text>
+							<Text text="{domainModel>attributeDesc}"></Text>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+			<!--<StandardListItem title="Attribute 2" info="Division"/>-->
+			<!--<StandardListItem title="Attribute 3" info="Customer"/>-->
+			<!--<StandardListItem title="Attribute 4" info="Distribution Channel"/>-->
+			<!--<StandardListItem title="Attribute 5" info="Material Group"/>-->
+			<!--<StandardListItem title="Attribute 6" info="Material Group 4"/>-->
+			<!--<StandardListItem title="Attribute 7" info="Plant"/>-->
+			<!--<StandardListItem title="Attribute 8" info="Storage Location "/>-->
+			<!--<StandardListItem title="Attribute 9" info="Country"/>-->
+			<!--<StandardListItem title="Attribute 10" info="Order Type "/>-->
+			<!--</List>-->
+		</content>
+		<buttons>
+			<Button text="OK" press="onOkCreateFrag"></Button>
+			<Button text="Cancel" press="onCancelCreateFrag"></Button>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,10 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<SelectDialog title="{i18n>materialGroup4FragTitle}" liveChange="onLiveChangeMaterialGroup4" multiSelect="true"
+		confirm="onConfirmChangeMaterialGroup4" cancel="onCancelChangeSalesOrganization" items="{MaterialGrp4Set>/results}"
+		class="sapUiSizeCompact">
+		<StandardListItem
+			title="{parts:[{path:'MaterialGrp4Set>Matgroup4desc'},{path:'MaterialGrp4Set>Materialgroup4'}],formatter:'.formatter.f4ValueBind'}"
+			tooltip="{parts:[{path:'MaterialGrp4Set>Matgroup4desc'},{path:'MaterialGrp4Set>Materialgroup4'}],formatter:'.formatter.f4ValueBind'}"
+			type="Active"></StandardListItem>
+	</SelectDialog>
+</core:FragmentDefinition>

@@ -1,0 +1,10 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+		<SelectDialog  title="District" 
+		liveChange="onLiveChangeDis1"  multiSelect="true"
+		confirm="onConfirmChangeDis1" cancel="onCancelChangeSalesOrganization" items="{Dis1Set>/results}" class="sapUiSizeCompact">
+		<StandardListItem
+		title="{parts:[{path:'Dis1Set>districtCode'},{path:'Dis1Set>districtName'}],formatter:'.formatter.f4ValueBind'}"
+									tooltip="{parts:[{path:'Dis1Set>districtCode'},{path:'Dis1Set>districtName'}],formatter:'.formatter.f4ValueBind'}"
+			type="Active"/>
+	</SelectDialog>
+</core:FragmentDefinition>

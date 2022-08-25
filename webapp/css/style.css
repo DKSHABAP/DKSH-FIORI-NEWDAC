@@ -1,0 +1,26 @@
+/* Enter your custom styles here */
+
+.sap-desktop {
+    overflow-y: hidden !important;
+}
+
+.sapUiSizeCompact .sapUiFormContainerTitle>.sapUiFormTitle {
+    height: 0rem!important;
+    line-height: 1rem;
+}
+
+.sapMDialog>header.sapMDialogTitle .sapMTitle {
+    color: #000 !important;
+}
+
+.permissionMasterCls .sapMIBar-CTX .sapMTitle {
+    color: #000;
+    text-shadow: 0 0 0.125rem #fff;
+}
+.toolbarCss .sapMTB {
+    height: 2rem;
+    margin-top: 0 !important;
+}
+.newCls{
+    width:7%;
+}

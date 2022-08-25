@@ -1,0 +1,10 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+		<SelectDialog  title="{i18n>CustomerNumFragTitle}" 
+		liveChange="onLiveChangeCustomerNumber"  multiSelect="true"
+		confirm="onConfirmChangeCustomerNumber" cancel="onCancelChangeSalesOrganization" items="{CustomerNumSet>/results}" class="sapUiSizeCompact">
+		<StandardListItem
+		title="{parts:[{path:'CustomerNumSet>Name1'},{path:'CustomerNumSet>CustCode'}],formatter:'.formatter.f4ValueBind'}"
+									tooltip="{parts:[{path:'CustomerNumSet>Name1'},{path:'CustomerNumSet>CustCode'}],formatter:'.formatter.f4ValueBind'}"
+			type="Active"/>
+	</SelectDialog>
+</core:FragmentDefinition>

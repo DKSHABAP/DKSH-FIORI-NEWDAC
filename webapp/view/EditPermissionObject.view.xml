@@ -1,0 +1,372 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+	controllerName="com.incture.cherrywork.newdac.controller.EditPermissionObject" xmlns:html="http://www.w3.org/1999/xhtml">
+	<App>
+		<pages>
+			<Page title="Edit Permission Object">
+				<content>
+									<Panel expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/SalesOrgPanel}" expand="onExpand">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="{i18n>salesOrganizationPanelText}" wrapping="true" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+										<Switch  customTextOff="No" customTextOn="Yes" state="{SwitchOnOffSet>/SalesOrgSwitch}" enabled="{UpdateCreateIndModelViewSet>/EditableField}" change="onChangeSwitchSalesOrganization"></Switch>
+								</Toolbar>
+							</headerToolbar>
+							<Table items="{SlaesOrgViewSet>/results}" id="ID_TBL_VIEW_PROV_SELS_ORG" fixedLayout="false" inset="false" mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}">
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{i18n>salesOrganizationCountLbl}" id="ID_PROV_LBL_C_SALS_ORG" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Button type="Accept" icon="sap-icon://add" press="handleValueHelpSalesOrganization" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="Sales Organization Id" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="Sales Organization Desc" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="Inclusion" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<Text></Text>
+										<Text text="{SlaesOrgViewSet>attributeValue}"></Text>
+										<Text text="{SlaesOrgViewSet>attributeValueDesc}"></Text>
+										<CheckBox  selected="{SlaesOrgViewSet>isInclusion}" />
+										<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteSalsOrganization" enabled="{UpdateCreateIndModelViewSet>/EditableField}"/>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+						<!--Customer-->
+						<Panel expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/CustomerPanel}" expand="onExpand">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="{i18n>customerPanelText}" wrapping="true" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+										<Switch  customTextOff="No" customTextOn="Yes"  state="{SwitchOnOffSet>/CustomerSwitch}" enabled="{UpdateCreateIndModelViewSet>/EditableField}" change="onChangeSwitchCustomerNumber"></Switch>
+								</Toolbar>
+							</headerToolbar>
+							<Table items="{CustomerNumViewSet>/results}" id="ID_TBL_VIEW_PROV_CUST_NUM" fixedLayout="false"
+							 mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}"
+							inset="false">
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{i18n>customerLblCount}" id="ID_PROV_LBL_C_CUST_NUM" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Button type="Accept" icon="sap-icon://add" press="handleValueHelpCustomerNumber" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>custNumberTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>custNameTblText}" design="Bold"/>
+									</Column>
+										<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="Inclusion" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<Text></Text>
+										<Text text="{CustomerNumViewSet>attributeValue}"></Text>
+										<Text text="{CustomerNumViewSet>attributeValueDesc}"></Text>
+										<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteCustomerNumber" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>	
+				<Panel visible="false" expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/MaterialNumPanel}" expand="onExpand">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="{i18n>materialPanelText}" wrapping="true" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+										<Switch  customTextOff="No" customTextOn="Yes" state="{SwitchOnOffSet>/MaterialNumSwitch}" enabled="{UpdateCreateIndModelViewSet>/EditableField}" change="onChangeSwitchMaterialNo"></Switch>
+								</Toolbar>
+							</headerToolbar>
+							<Table items="{MaterialNumViewSet>/results}" id="ID_TBL_VIEW_PROV_MATERIAL_NUM" fixedLayout="false"
+							 mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}"
+							inset="false">
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{i18n>materialNumberCountLbl}" id="ID_PROV_LBL_C_Mat_NUM" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Button type="Accept" icon="sap-icon://add" press="handleValueHelpMaterialNumber" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>materialNumberTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>materialNumberNameTblText}" design="Bold"/>
+									</Column>
+										<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="Inclusion" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<Text></Text>
+										<Text text="{MaterialNumViewSet>}"></Text>
+										<Text text="{MaterialNumViewSet>}"></Text>
+										<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteMaterialNumber" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+						<!--Distribution Channel-->
+						<Panel expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/DistribuChanlPanel}" expand="onExpand">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="{i18n>distributionChannelPanelText}" wrapping="true" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+										<Switch  customTextOff="No" customTextOn="Yes" state="{SwitchOnOffSet>/DistribuChanlSwitch}" enabled="{UpdateCreateIndModelViewSet>/EditableField}" change="onChangeSwitchDistributionChanl"></Switch>
+								</Toolbar>
+							</headerToolbar>
+							<Table items="{DistributionChannelViewSet>/results}" id="ID_TBL_VIEW_PROV_DISTRU_CHANL"
+							 mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}"
+							fixedLayout="false" inset="false">
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{i18n>distributionChannelCountLbl}" id="ID_PROV_LBL_C_DISTRI_CHNL" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Button type="Accept" icon="sap-icon://add" press="handleValueHelpDistributionChannel" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>distributionIdTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>distributionNameTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="Inclusion" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<Text></Text>
+										<Text text="{DistributionChannelViewSet>attributeValue}"></Text>
+										<Text text="{DistributionChannelViewSet>attributeValueDesc}"></Text>
+										<CheckBox selected="{DistributionChannelViewSet>isInclusion}"/>
+										<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteDistributionChannel" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+							<!--Material Group-->
+						<Panel expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/MaterialGrpPanel}" expand="onExpand">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="{i18n>materialGroupPanelText}" wrapping="true" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+										<Switch  customTextOff="No" customTextOn="Yes" state="{SwitchOnOffSet>/MaterialGrpSwitch}" enabled="{UpdateCreateIndModelViewSet>/EditableField}" change="onChangeSwitchMaterialGroup"></Switch>
+								</Toolbar>
+							</headerToolbar>
+							<Table items="{MaterialGrpViewSet>/results}" id="ID_TBL_VIEW_PROV_MAT_GRP_" fixedLayout="false"
+							 mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}"
+							inset="false">
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{i18n>materialGroupCountLbl}" id="ID_PROV_LBL_C_MAT_GRP" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Button type="Accept" icon="sap-icon://add" press="handleValueHelpMaterialGroup" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>MaterialGroupIdTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>materialGroupNameTblText}" design="Bold"/>
+									</Column>
+										<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="Inclusion" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<Text></Text>
+										<Text text="{MaterialGrpViewSet>attributeValue}"></Text>
+										<Text text="{MaterialGrpViewSet>attributeValueDesc}"></Text>
+										<CheckBox selected="{MaterialGrpViewSet>isInclusion}"/>
+										<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteMaterialGroup" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+							
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+						<!--Material Group One-->
+						<Panel expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/MaterialGrpOnePanel}" expand="onExpand">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="{i18n>materialGroupOnePanelText}" wrapping="true" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+										<Switch  customTextOff="No" customTextOn="Yes" state="{SwitchOnOffSet>/MaterialGrpOneSwitch}" enabled="{UpdateCreateIndModelViewSet>/EditableField}" change="onChangeSwitchMaterialGroupOne"></Switch>
+								</Toolbar>
+							</headerToolbar>
+							<Table items="{MaterialGrpOneViewSet>/results}" id="ID_TBL_VIEW_PROV_MAT_GRP_ONE"
+							 mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}"
+							fixedLayout="false" inset="false">
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{i18n>materialGroupOneCountLbl}" id="ID_PROV_LBL_C_MAT_GRP_ONE" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Button type="Accept" icon="sap-icon://add" press="handleValueHelpMaterialGroupOne" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>MaterialGroupOneIdTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>materialGroupOneNameTblText}" design="Bold"/>
+									</Column>
+										<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="Inclusion" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<Text></Text>
+										<Text text="{MaterialGrpOneViewSet>attributeValue}"></Text>
+										<Text text="{MaterialGrpOneViewSet>attributeValueDesc}"></Text>
+										<CheckBox selected="{MaterialGrpViewSet>isInclusion}"/>
+										<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteMaterialGroupOne" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+							
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+						
+						
+						<!--Material 4-->
+						<Panel expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/MaterialGrp4Panel}" expand="4xpand">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="{i18n>materialGroup4PanelText}" wrapping="true" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+										<Switch  customTextOff="No" customTextOn="Yes" state="{SwitchOnOffSet>/MaterialGrp4Switch}" enabled="{UpdateCreateIndModelViewSet>/EditableField}" change="onChangeSwitchMaterialGroup4"></Switch>
+								</Toolbar>
+							</headerToolbar>
+							<Table items="{MaterialGrp4ViewSet>/results}" id="ID_TBL_VIEW_PROV_MAT_GRP_4"
+							 mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}"
+							fixedLayout="false" inset="false">
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{i18n>materialGroup4CountLbl}" id="ID_PROV_LBL_C_MAT_GRP_4" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Button type="Accept" icon="sap-icon://add" press="handleValueHelpMaterialGroup4" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>MaterialGroup4IdTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>materialGroup4NameTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+										<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="Inclusion" design="Bold"/>
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<Text></Text>
+										<Text text="{MaterialGrp4ViewSet>attributeValue}"></Text>
+										<Text text="{MaterialGrp4ViewSet>attributeValueDesc}"></Text>
+										<CheckBox selected="{MaterialGrp4ViewSet>isInclusion}"/>
+										<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteMaterialGroup4" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+							
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+						
+						
+						<!--District-->
+						<Panel expandable="true" class="sapUiSizeCompact" expanded="{PanelOnOffSet>/DistrictPanel}" expand="onExpand">
+							<headerToolbar>
+								<Toolbar>
+									<Label text="{i18n>districtPanelText}" wrapping="true" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Label text="{i18n>allSelectCheckBoxTxt}" wrapping="true" design="Bold"></Label>
+										<Switch  customTextOff="No" customTextOn="Yes" state="{SwitchOnOffSet>/DistrictSwitch}" enabled="{UpdateCreateIndModelViewSet>/EditableField}" change="onChangeSwitchDistrict"></Switch>
+								</Toolbar>
+							</headerToolbar>
+							<Table items="{DistrictViewSet>/results}" id="ID_TBL_VIEW_PROV_DISTRICT"
+							 mode="{path:'UpdateCreateIndModelViewSet>/EditableField',formatter:'.formatter.TableModeChange'}"
+							fixedLayout="false" inset="false">
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{i18n>distrcitCountLbl}" id="ID_PROV_LBL_C_MAT_DISTRCT" design="Bold"></Label>
+										<ToolbarSpacer></ToolbarSpacer>
+										<Button type="Accept" icon="sap-icon://add" press="handleValueHelpDistrcitt" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="10%"></Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>districtIdTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="{i18n>districtNameTblText}" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+										<Label text="Inclusion" design="Bold"/>
+									</Column>
+									<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="7%"></Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<Text></Text>
+										<Text text="{DistrictViewSet>attributeValue}"></Text>
+										<Text text="{DistrictViewSet>attributeValueDesc}"></Text>
+									<CheckBox selected="{DistrictViewSet>isInclusion}"/>
+										<Button icon="sap-icon://delete" type="Reject" press="onPressDeleteDistrict" enabled="{UpdateCreateIndModelViewSet>/EditableField}"></Button>
+								
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+					
+					
+				</content>
+					<OverflowToolbar>
+				<ToolbarSpacer/>
+				<Button text="Cancel" press="onCancel" />
+				<Button text="Update" press="onUpdate" />
+			</OverflowToolbar>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>
