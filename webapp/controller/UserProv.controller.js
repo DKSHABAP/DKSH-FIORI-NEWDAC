@@ -7,14 +7,6 @@ sap.ui.define([
 	"use strict";
 	return Controller.extend("com.incture.cherrywork.newdac.controller.UserProv", {
 		formatter: formatter,
-		
-		// TEMP-TEST 18082022 (begin)
-		garrUsersOri: [],
-		gvarItemAll: "",
-		gvarItemCounts: "",
-		gvTestNum: 0,
-		// TEMP-TEST 18082022 (begin)
-		
 		onInit: function () {
 			this.getView().byId("ID_TABLE_USR").setSticky(["ColumnHeaders", "HeaderToolbar"]);
 			var oModelRef = new sap.ui.model.json.JSONModel({
@@ -33,15 +25,7 @@ sap.ui.define([
 			if (oEvent.getParameter("name") === "RouteUserProv") {
 				if (refrs.refreshUser) {
 					this.getView().byId("ID_PROV_USER_DET_M").setValue("");
-					
-					// TEMP-TEST 18082022 (begin)
-					// this.getAllUsers();
-					// Below to temporary get 300+ users
-					this.gvTestNum = 0;
-					var oStartIndex = 0; 
-					this.onHandleGetUsers(oStartIndex);
-					// TEMP-TEST 18082022 (end)
-					
+					this.getAllUsers();
 					var oModelRef = new sap.ui.model.json.JSONModel({
 						refreshUser: false
 					});
@@ -49,232 +33,7 @@ sap.ui.define([
 				}
 			}
 		},
-		
-		// TEMP-TEST 18082022 (begin)
-		onHandleGetUsers: function(oStartIndex,oSync)
-		{
-			var that = this;
-			this.onFetchUserByGroup(oStartIndex, function(oResponse){
-				if( oResponse.callfunction === "success" )
-				{
-					var oStartIndexNext;
-					var aData = oResponse.datareturn;
-					var totalItem = aData.totalResults;
-					var resource = aData.Resources;
-					var lastIndexResrc = resource.length;
-					
-					if( that.garrUsersOri.length === 0 )
-					{
-						that.gvarItemAll = totalItem;
-						that.garrUsersOri = resource;
-						that.gvarItemCounts = lastIndexResrc +1;
-						that.onHandleGetUsers(that.gvarItemCounts);
-					}
-					
-					else
-					{
-						that.gvarItemCounts = that.gvarItemCounts + lastIndexResrc;
-						if( that.garrUsersOri.length < parseInt(that.gvarItemAll,10) && that.garrUsersOri.length !== parseInt(that.gvarItemAll,10) )
-						{
-							for( var i=0; i<resource.length; i++ )
-							{
-								that.garrUsersOri.push(resource[i]);
-								if( resource.length === i+1 )
-								{ 
-									oStartIndexNext = that.gvarItemCounts;
-									if( that.garrUsersOri.length === parseInt(that.gvarItemAll,10) )
-									{
-										var oArrayUsers = JSON.parse(JSON.stringify( that.garrUsersOri )); 
-										// Here modify check array users call function 
-										// that.onCheckUsers(oArray);
-										// if(oSync === "sync"){ sap.m.MessageToast.show("Sync of HANA and IAS users are done successfully"); } 
-									}
-									else
-									{
-										// 15082022 Original codes commented
-										// that.onHandleGetUsers(oStartIndexNext);
-										
-										// 15082022 Test
-										if( that.gvTestNum === 0 ){
-											oStartIndexNext = 201;
-											that.gvTestNum = that.gvTestNum+1;
-											that.onHandleGetUsers(oStartIndexNext);
-										}
-										else if( that.gvTestNum === 1 ){
-											oStartIndexNext = 301;
-											that.gvTestNum = that.gvTestNum+1;
-											that.onHandleGetUsers(oStartIndexNext);
-										}
-										else if( that.gvTestNum === 2 ){
-											var oArray = JSON.parse(JSON.stringify( that.garrUsersOri )); 
-											that.onCheckUsers(oArray);
-											if(oSync === "sync"){ sap.m.MessageToast.show("Sync of HANA and IAS users are done successfully"); } 
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				else if( oResponse.callfunction === "error" )
-				{
-					sap.m.MessageToast.show("Test Error in Retrieving All Users");
-				}
-			});
-		},
-		// TEMP-TEST 18082022 (end)
-		
-		// TEMP-TEST 18082022 (begin)
-		onFetchUserByGroup: function(oStartIndex, oCallback)
-		{
-			// Refer URL : 1."/IDPService/service/scim/Users" | 2."/IDPService/scim/Users" & parameters ?count=120&startIndex=50
-			var oBusyDialog = new sap.m.BusyDialog();
-			oBusyDialog.open();
-			var oResponse = [];
-			jQuery.ajax({
-				type: "GET",
-				url: "/IDPService/service/scim/Users",
-				data: { startIndex: oStartIndex },
-				// contentType: "application/json",
-				// dataType: "json",
-				async: false,
-				success: function (data, textStatus, jqXHR) 
-				{
-					oBusyDialog.close();
-					oResponse = { callfunction:"success" , datareturn:data };
-					oCallback(oResponse);
-				},
-				error: function (jqXHR, textStatus, errorThrown) 
-				{
-					oBusyDialog.close();
-					oResponse = { callfunction:"error" , datareturn:[] };
-					oCallback(oResponse);
-				}
-			});
-		},
-		// TEMP-TEST 18082022 (end)
-		
-		// TEMP-TEST 18082022 (begin)
-		onCheckUsers: function(oArrayUsers)
-		{
-			var that = this;
-			var fData = [];
-			if(oArrayUsers) 
-			{
-				var finalData = [];
-				for (var i = 0; i < oArrayUsers.length; i++) 
-				{
-					var phoneNo = "";
-					var country = "";
-					if (oArrayUsers[i].phoneNumbers !== null || oArrayUsers[i].phoneNumbers !== undefined ) 
-					{
-						if (oArrayUsers[i].phoneNumbers !== undefined) {
-							phoneNo = oArrayUsers[i].phoneNumbers[0].value;
-						}
-					}
-					// country
-					if (oArrayUsers[i].addresses !== null || oArrayUsers[i].phoneNumbers !== undefined ) 
-					{
-						if (oArrayUsers[i].addresses !== undefined) {
-							country = oArrayUsers[i].addresses[0].country;
-						}
-					}
-					
-					var salesOrgArr = [];
-					var distributionChannel = [];
-					var district = [];
-					var materialGrp = [];
-					var materialGrp4 = [];
-					var custNoArr = [];
-					var materialGrpOne = [];
-					
-					if (oArrayUsers[i]["userCustomAttributes"] !== undefined) 
-					{
-						var attributesArr = oArrayUsers[i]["userCustomAttributes"].attributes;
-						
-						for (var k = 0; k < attributesArr.length; k++) {
-							if (attributesArr[k].name === "customAttribute1") {
-								salesOrgArr = attributesArr[k].value.split("@");
-							}
-						}
 
-						for (var k = 0; k < attributesArr.length; k++) {
-							if (attributesArr[k].name === "customAttribute2") {
-								distributionChannel = attributesArr[k].value.split("@");
-							}
-						}
-
-						for (var k = 0; k < attributesArr.length; k++) {
-							if (attributesArr[k].name === "customAttribute3") {
-								district = attributesArr[k].value.split("@");
-							}
-						}
-
-						for (var k = 0; k < attributesArr.length; k++) {
-							if (attributesArr[k].name === "customAttribute4") {
-								materialGrp = attributesArr[k].value.split("@");
-							}
-						}
-
-						for (var k = 0; k < attributesArr.length; k++) {
-							if (attributesArr[k].name === "customAttribute5") {
-								materialGrp4 = attributesArr[k].value.split("@");
-							}
-						}
-
-						for (var k = 0; k < attributesArr.length; k++) {
-							if (attributesArr[k].name === "customAttribute6") {
-								custNoArr = attributesArr[k].value.split("@");
-							}
-						}
-					}
-					
-					finalData.push({
-						groups: oArrayUsers[i].groups,
-						id: oArrayUsers[i].id,
-						familyName: oArrayUsers[i].name.familyName,
-						givenName: oArrayUsers[i].name.givenName,
-						emails: oArrayUsers[i].emails[0].value,
-						FullName: oArrayUsers[i].name.givenName + " " + oArrayUsers[i].name.familyName,
-						phoneNumbers: phoneNo,
-						country: country,
-						SalesOrganization: salesOrgArr,
-						CustomerNumber: custNoArr,
-						DistributionChannel: distributionChannel,
-						District: district,
-						MaterialGroup: materialGrp,
-						MaterialGroupOne: materialGrpOne,
-						MaterialGroup4: materialGrp4
-					});
-					
-					fData.push(finalData);
-					var mergedArr = [].concat.apply([], fData);
-
-					var flags = {};
-					var merged = mergedArr.filter(function (entry) {
-						if (flags[entry.id]) {
-							return false;
-						}
-						flags[entry.id] = true;
-						return true;
-					});
-
-					merged.sort(function (a, b) {
-						return (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0);
-					});
-					
-					var msgTotal = that.i18nModel.getProperty("userDetails");
-					that.getView().byId("ID_TXT_HDR").setText(msgTotal + " (" + merged.length + ")");
-					var oModelData = new sap.ui.model.json.JSONModel({
-						results: merged
-					});
-					oModelData.setSizeLimit(merged.length);
-					that.getView().byId("ID_TABLE_USR").setModel(oModelData, "UsetTableSet");
-				}
-			}
-		},
-		// TEMP-TEST 18082022 (end)
-		
 		//read all user IAS
 		getAllUsers: function (value) {
 			var oBusyDialog = new sap.m.BusyDialog();
@@ -444,23 +203,11 @@ sap.ui.define([
 
 		},
 
-		refreshBtnUser: function () 
-		{
-			// TEMP-TEST 18082022 (begin)
-			// this.getAllUsers();
-			this.gvTestNum = 0;
-			var oStartIndex = 0; 
-			this.onHandleGetUsers(oStartIndex);
-			// TEMP-TEST 18082022 (end)
+		refreshBtnUser: function () {
+			this.getAllUsers();
 		},
-		syncBtnUser: function () 
-		{
-			// TEMP-TEST 18082022 (begin)
-			// this.getAllUsers("sync");
-			this.gvTestNum = 0;
-			var oStartIndex = 0; 
-			this.onHandleGetUsers(oStartIndex,"sync");
-			// TEMP-TEST 18082022 (end)
+		syncBtnUser: function () {
+			this.getAllUsers("sync");
 		},
 
 		//on update cancel
@@ -687,14 +434,7 @@ sap.ui.define([
 						success: function (data, textStatus, jqXHR) {},
 						error: function (data, textStatus, jqXHR) {}
 					});
-					
-					// TEMP-TEST 18082022 (begin)
-					// that.getAllUsers();
-					that.gvTestNum = 0;
-					var oStartIndex = 0; 
-					that.onHandleGetUsers(oStartIndex);
-					// TEMP-TEST 18082022 (end)
-					
+					that.getAllUsers();
 					sap.m.MessageToast.show(oName + " (" + oUserId + ")" + " is deleted successfully");
 				} else {
 					var oMsg = oEvent.getParameters().errorobject.responseText;
