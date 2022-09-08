@@ -7,12 +7,6 @@ sap.ui.define([
 	"use strict";
 	return Controller.extend("com.incture.cherrywork.newdac.controller.UserProv", {
 		formatter: formatter,
-		// TEMP-TEST 18082022 (begin)
-		garrUsersOri: [],
-		gvarItemAll: "",
-		gvarItemCounts: "",
-		gvTestNum: 0,
-		// TEMP-TEST 18082022 (begin)
 
 		onInit: function () {
 			this.getView().byId("ID_TABLE_USR").setSticky(["ColumnHeaders", "HeaderToolbar"]);
@@ -47,14 +41,14 @@ sap.ui.define([
 			var that = this;
 			var fData = [];
 			var sURI = '/UserManagement/scim/Users?filter=groups.display co "DKSH_"';
-			this.getOwnerComponent().getApiModel("CCUsers", sURI).then(
+			this.getOwnerComponent().getApiModel("CCUsers", sURI, value === "sync" ).then(
 				function (oData) {
 					var resultData = {
 						resources: oData.Resources ? oData.Resources : null
 					};
 					if (resultData.resources) {
 						if (value)
-							sap.m.MessageToast.show(that.i18nModel.getText("syncOk"));
+							sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncOk"));
 						var finalData = [];
 						for (var i = 0; i < resultData.resources.length; i++) {
 							var phoneNo = "";
@@ -163,32 +157,22 @@ sap.ui.define([
 						oBusyDialog.close();
 
 					} else {
-						sap.m.MessageToast.show(this.i18nModel.getText("syncNok"));
+						sap.m.MessageToast.show(this.i18nModel.getResourceBundle().getText("syncNok"));
 						oBusyDialog.close();
 					}
 				},
 				function (oError) {
-					sap.m.MessageToast.show(this.i18nModel.getText("syncNok"));
+					sap.m.MessageToast.show(this.i18nModel.getResourceBundle().getText("syncNok"));
 					oBusyDialog.close();
 				}
 			);
 		},
 
 		refreshBtnUser: function () {
-			// TEMP-TEST 18082022 (begin)
-			// this.getAllUsers();
-			this.gvTestNum = 0;
-			var oStartIndex = 0;
-			this.onHandleGetUsers(oStartIndex);
-			// TEMP-TEST 18082022 (end)
+			this.getAllUsers();
 		},
 		syncBtnUser: function () {
-			// TEMP-TEST 18082022 (begin)
-			// this.getAllUsers("sync");
-			this.gvTestNum = 0;
-			var oStartIndex = 0;
-			this.onHandleGetUsers(oStartIndex, "sync");
-			// TEMP-TEST 18082022 (end)
+			this.getAllUsers("sync");
 		},
 
 		//on update cancel
@@ -418,7 +402,6 @@ sap.ui.define([
 						error: function (data, textStatus, jqXHR) {}
 					});
 					that.getAllUsers();
-					that.gvTestNum = 0;
 					sap.m.MessageToast.show(oName + " (" + oUserId + ")" + " is deleted successfully");
 				} else {
 					var oMsg = oEvent.getParameters().errorobject.responseText;

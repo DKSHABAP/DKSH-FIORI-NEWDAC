@@ -35,9 +35,10 @@ sap.ui.define([
 		 * Get API model
 		 * @param sModel string API model key
 		 * @param sURI string URI string
+		 * @param bSync boolean force reload
 		 * @returns Promise GET response data
 		 */
-		getApiModel: function (sModel, sURI) {
+		getApiModel: function (sModel, sURI, bSync) {
 			var oModel = new sap.ui.model.json.JSONModel();
 			var fnLoadModel = function (sURL, oParameters) {
 				return new Promise(function (fnResolve) {
@@ -52,6 +53,9 @@ sap.ui.define([
 					);
 				});
 			};
+			if (bSync){
+				this.oApiModel[sModel] = null;
+			}
 			if (!this.oApiModel[sModel]) {
 				this.oApiModel[sModel] = new Promise(
 					function (fnResolve, fnReject) {

@@ -9,12 +9,6 @@ sap.ui.define([
 	return Controller.extend("com.incture.cherrywork.newdac.controller.Create", {
 		formatter: formatter,
 
-		// TEMP-TEST 18082022 (begin)
-		garrGroupsOri: [],
-		gvarItemAll: "",
-		gvarItemCounts: "",
-		// TEMP-TEST 18082022 (end)
-
 		onInit: function () {
 			var router = sap.ui.core.UIComponent.getRouterFor(this);
 			router.attachRoutePatternMatched(this._handleRouteMatched, this);
@@ -63,12 +57,7 @@ sap.ui.define([
 			this.oModelMaterial = this.getView().getModel("MaterialModel");
 
 			this.getCountryList();
-
-			// TEMP-TEST 18082022 (begin)
 			this.getGroupList();
-			// var startIndex = 0;
-			// this.onHandleGroupList(startIndex);
-			// TEMP-TEST 18082022 (end)
 		},
 
 		//all table Data binding
@@ -358,29 +347,28 @@ sap.ui.define([
 			var finalData = [];
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
-			this.getOwnerComponent()
-				.getApiModel("CCGroups", sURL)
-				.then(function (oData) {
-						oBusyDialog.close();
-						for (var i = 0; i < oData.Resources.length; i++) {
-							finalData.push({
-								key: oData.Resources[i]["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].name,
-								desc: oData.Resources[i]["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].description
-							});
-						}
-						var groupModel = new sap.ui.model.json.JSONModel({
-							results: finalData
-						});
-						groupModel.setSizeLimit(finalData.length);
-						that.getView().setModel(groupModel, "GroupModelSet");
-					},
-					function (oError) {
-						oBusyDialog.close();
-						sap.m.MessageBox.error(oError, {
-							styleClass: "sapUiSizeCompact"
+			this.getOwnerComponent().getApiModel("CCGroups", sURL, false).then(
+				function (oData) {
+					oBusyDialog.close();
+					for (var i = 0; i < oData.Resources.length; i++) {
+						finalData.push({
+							key: oData.Resources[i]["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].name,
+							desc: oData.Resources[i]["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].description
 						});
 					}
-				);
+					var groupModel = new sap.ui.model.json.JSONModel({
+						results: finalData
+					});
+					groupModel.setSizeLimit(finalData.length);
+					that.getView().setModel(groupModel, "GroupModelSet");
+				},
+				function (oError) {
+					oBusyDialog.close();
+					sap.m.MessageBox.error(oError, {
+						styleClass: "sapUiSizeCompact"
+					});
+				}
+			);
 		},
 
 		///////////////////////////////// Sales Organization /////////////////////////////////////////////////
