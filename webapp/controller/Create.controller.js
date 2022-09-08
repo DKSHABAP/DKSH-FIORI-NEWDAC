@@ -8,13 +8,13 @@ sap.ui.define([
 
 	return Controller.extend("com.incture.cherrywork.newdac.controller.Create", {
 		formatter: formatter,
-		
+
 		// TEMP-TEST 18082022 (begin)
 		garrGroupsOri: [],
 		gvarItemAll: "",
 		gvarItemCounts: "",
 		// TEMP-TEST 18082022 (end)
-		
+
 		onInit: function () {
 			var router = sap.ui.core.UIComponent.getRouterFor(this);
 			router.attachRoutePatternMatched(this._handleRouteMatched, this);
@@ -63,11 +63,11 @@ sap.ui.define([
 			this.oModelMaterial = this.getView().getModel("MaterialModel");
 
 			this.getCountryList();
-			
+
 			// TEMP-TEST 18082022 (begin)
-			// this.getGroupList();
-			var startIndex = 0;
-			this.onHandleGroupList(startIndex);
+			this.getGroupList();
+			// var startIndex = 0;
+			// this.onHandleGroupList(startIndex);
 			// TEMP-TEST 18082022 (end)
 		},
 
@@ -350,72 +350,55 @@ sap.ui.define([
 				});
 			});
 		},
-		
+
 		// TEMP-TEST 18082022 (begin)
-		onHandleGroupList: function(oStartIndex)
-		{
+		onHandleGroupList: function (oStartIndex) {
 			var that = this;
-			this.onFetchGroupList(oStartIndex, function(oResponse)
-			{
-				if( oResponse.callfunction === "success" )
-				{
+			this.onFetchGroupList(oStartIndex, function (oResponse) {
+				if (oResponse.callfunction === "success") {
 					var oStartIndexNext;
 					var aData = oResponse.datareturn;
 					var totalItem = aData.totalResults;
 					var resource = aData.Resources;
 					var lastIndexResrc = resource.length;
-					
-					if( that.garrGroupsOri.length === 0 )
-					{
+
+					if (that.garrGroupsOri.length === 0) {
 						that.gvarItemAll = totalItem;
 						that.garrGroupsOri = resource;
-						that.gvarItemCounts = lastIndexResrc +1;
+						that.gvarItemCounts = lastIndexResrc + 1;
 						that.onHandleGroupList(that.gvarItemCounts);
-					}
-					else
-					{
+					} else {
 						that.gvarItemCounts = that.gvarItemCounts + lastIndexResrc;
-						if( that.garrGroupsOri.length < parseInt(that.gvarItemAll,10) && that.garrGroupsOri.length !== parseInt(that.gvarItemAll,10) )
-						{
-							for( var i=0; i<resource.length; i++ )
-							{
+						if (that.garrGroupsOri.length < parseInt(that.gvarItemAll, 10) && that.garrGroupsOri.length !== parseInt(that.gvarItemAll, 10)) {
+							for (var i = 0; i < resource.length; i++) {
 								that.garrGroupsOri.push(resource[i]);
-								if( resource.length === i+1 )
-								{ 
+								if (resource.length === i + 1) {
 									oStartIndexNext = that.gvarItemCounts;
-									if( that.garrGroupsOri.length === parseInt(that.gvarItemAll,10) )
-									{
-										var oArrayGroup = JSON.parse(JSON.stringify( that.garrGroupsOri )); 
+									if (that.garrGroupsOri.length === parseInt(that.gvarItemAll, 10)) {
+										var oArrayGroup = JSON.parse(JSON.stringify(that.garrGroupsOri));
 										// Here modify check array users call function 
 										that.onBindGroupList(oArrayGroup);
-									}
-									else
-									{
+									} else {
 										that.onHandleGroupList(oStartIndexNext);
 									}
 								}
 							}
 						}
 					}
-				}
-				else if( oResponse.callfunction === "error" )
-				{
+				} else if (oResponse.callfunction === "error") {
 					sap.m.MessageToast.show("Test Error in Retrieving All Users");
 				}
 			});
 		},
 		// TEMP-TEST 18082022 (end)
-		
+
 		// TEMP-TEST 18082022 (begin)
-		onBindGroupList: function(oArrayGroup)
-		{
+		onBindGroupList: function (oArrayGroup) {
 			var that = this;
 			var finalData = [];
-			for (var i = 0; i < oArrayGroup.length; i++) 
-			{
+			for (var i = 0; i < oArrayGroup.length; i++) {
 				var oKey = oArrayGroup[i]["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].name;
-				if( oKey.startsWith("DKSH-API") === false )
-				{
+				if (oKey.startsWith("DKSH-API") === false) {
 					finalData.push({
 						key: oArrayGroup[i]["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].name,
 						desc: oArrayGroup[i]["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].description
@@ -429,10 +412,9 @@ sap.ui.define([
 			that.getView().setModel(groupModel, "GroupModelSet");
 		},
 		// TEMP-TEST 18082022 (end)
-		
+
 		// TEMP-TEST 18082022 (begin)
-		onFetchGroupList: function(oStartIndex, oCallback)
-		{
+		onFetchGroupList: function (oStartIndex, oCallback) {
 			// Refer URL : 1."/IDPService/service/scim/Groups" 2."/IDPService/scim/Groups" & parameters ?count=120&startIndex=50
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
@@ -440,20 +422,26 @@ sap.ui.define([
 			jQuery.ajax({
 				type: "GET",
 				url: "/IDPService/scim/Groups",
-				data: { startIndex: oStartIndex },
+				data: {
+					startIndex: oStartIndex
+				},
 				// contentType: "application/json",
 				// dataType: "json",
 				async: false,
-				success: function (data, textStatus, jqXHR) 
-				{
+				success: function (data, textStatus, jqXHR) {
 					oBusyDialog.close();
-					oResponse = { callfunction:"success" , datareturn:data };
+					oResponse = {
+						callfunction: "success",
+						datareturn: data
+					};
 					oCallback(oResponse);
 				},
-				error: function (jqXHR, textStatus, errorThrown) 
-				{
+				error: function (jqXHR, textStatus, errorThrown) {
 					oBusyDialog.close();
-					oResponse = { callfunction:"error" , datareturn:[] };
+					oResponse = {
+						callfunction: "error",
+						datareturn: []
+					};
 					oCallback(oResponse);
 				}
 			});
@@ -463,37 +451,33 @@ sap.ui.define([
 		//function to fetch the group list
 		getGroupList: function () {
 			var that = this;
-			var oURL = "/IDPService/service/scim/Groups";
-			var oModel = new sap.ui.model.json.JSONModel();
+			var sURL = '/IDPService/service/scim/Groups?filter=displayName co "DKSH_"';
+			var finalData = [];
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
-			var oData = [];
-			var finalData = [];
-			oModel.loadData(oURL, true, "GET", false, false);
-			oModel.attachRequestCompleted(function (oEvent) {
-				oBusyDialog.close();
-				if (oEvent.getParameter("success")) {
-					oData = oEvent.getSource().getData();
-					for (var i = 0; i < oData.Resources.length; i++) {
-						finalData.push({
-							key: oData.Resources[i]["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].name,
-							desc: oData.Resources[i]["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].description
+			this.getOwnerComponent()
+				.getApiModel("CCGroups", sURL)
+				.then(function (oData) {
+						oBusyDialog.close();
+						for (var i = 0; i < oData.Resources.length; i++) {
+							finalData.push({
+								key: oData.Resources[i]["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].name,
+								desc: oData.Resources[i]["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].description
+							});
+						}
+						var groupModel = new sap.ui.model.json.JSONModel({
+							results: finalData
+						});
+						groupModel.setSizeLimit(finalData.length);
+						that.getView().setModel(groupModel, "GroupModelSet");
+					},
+					function (oError) {
+						oBusyDialog.close();
+						sap.m.MessageBox.error(oError, {
+							styleClass: "sapUiSizeCompact"
 						});
 					}
-					var groupModel = new sap.ui.model.json.JSONModel({
-						results: finalData
-					});
-					groupModel.setSizeLimit(finalData.length);
-					that.getView().setModel(groupModel, "GroupModelSet");
-				}
-			});
-			oModel.attachRequestFailed(function (oEvent) {
-				oBusyDialog.close();
-				var sMsg = oEvent.getParameters().responseText;
-				sap.m.MessageBox.error(sMsg, {
-					styleClass: "sapUiSizeCompact"
-				});
-			});
+				);
 		},
 
 		///////////////////////////////// Sales Organization /////////////////////////////////////////////////
