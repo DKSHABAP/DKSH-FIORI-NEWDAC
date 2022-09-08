@@ -45,11 +45,12 @@
       }
     },
     {
-      "path": "/IDPService",
+      "path": "/IDPService/service",
       "target": {
         "type": "destination",
-        "name": "IDPService"
-      }
+        "name": "UserManagement_Dest"
+      },
+      "description": "User Management Destination"
     },
     {
       "path": "/DKSHODataService",
