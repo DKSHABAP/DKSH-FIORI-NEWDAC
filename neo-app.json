@@ -44,21 +44,19 @@
         "name": "userapi"
       }
     },
-    {
+        {
       "path": "/IDPService/md",
       "target": {
         "type": "destination",
-        "name": "UserManagement_Dest"
-      },
-      "description": "User Management Destination"
+        "name": "IDPService"
+      }
     },
     {
-      "path": "/IDPService/service",
+      "path": "/IDPService",
       "target": {
         "type": "destination",
-        "name": "UserManagement_Dest"
-      },
-      "description": "User Management Destination"
+        "name": "IDPService"
+      }
     },
     {
       "path": "/DKSHODataService",
