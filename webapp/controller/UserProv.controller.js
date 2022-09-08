@@ -35,11 +35,11 @@ sap.ui.define([
 					this.getView().byId("ID_PROV_USER_DET_M").setValue("");
 
 					// TEMP-TEST 18082022 (begin)
-					// this.getAllUsers();
+					this.getAllUsers();
 					// Below to temporary get 300+ users
-					this.gvTestNum = 0;
-					var oStartIndex = 1;
-					this.onHandleGetUsers(oStartIndex);
+					// this.gvTestNum = 0;
+					// var oStartIndex = 1;
+					// this.onHandleGetUsers(oStartIndex);
 					// TEMP-TEST 18082022 (end)
 
 					var oModelRef = new sap.ui.model.json.JSONModel({
@@ -162,42 +162,42 @@ sap.ui.define([
 					var custNoArr = [];
 					var materialGrpOne = [];
 
-					if (oArrayUsers[i]["userCustomAttributes"] !== undefined) {
-						var attributesArr = oArrayUsers[i]["userCustomAttributes"].attributes;
+					if (oArrayUsers[i].userCustomAttributes !== undefined) {
+						var attributesArr = oArrayUsers[i].userCustomAttributes.attributes;
 
-						for (var k = 0; k < attributesArr.length; k++) {
-							if (attributesArr[k].name === "customAttribute1") {
-								salesOrgArr = attributesArr[k].value.split("@");
+						for (var a = 0; a < attributesArr.length; a++) {
+							if (attributesArr[a].name === "customAttribute1") {
+								salesOrgArr = attributesArr[a].value.split("@");
 							}
 						}
 
-						for (var k = 0; k < attributesArr.length; k++) {
-							if (attributesArr[k].name === "customAttribute2") {
-								distributionChannel = attributesArr[k].value.split("@");
+						for (var b = 0; b < attributesArr.length; b++) {
+							if (attributesArr[b].name === "customAttribute2") {
+								distributionChannel = attributesArr[b].value.split("@");
 							}
 						}
 
-						for (var k = 0; k < attributesArr.length; k++) {
-							if (attributesArr[k].name === "customAttribute3") {
-								district = attributesArr[k].value.split("@");
+						for (var c = 0; c < attributesArr.length; c++) {
+							if (attributesArr[c].name === "customAttribute3") {
+								district = attributesArr[c].value.split("@");
 							}
 						}
 
-						for (var k = 0; k < attributesArr.length; k++) {
-							if (attributesArr[k].name === "customAttribute4") {
-								materialGrp = attributesArr[k].value.split("@");
+						for (var d = 0; d < attributesArr.length; d++) {
+							if (attributesArr[d].name === "customAttribute4") {
+								materialGrp = attributesArr[d].value.split("@");
 							}
 						}
 
-						for (var k = 0; k < attributesArr.length; k++) {
-							if (attributesArr[k].name === "customAttribute5") {
-								materialGrp4 = attributesArr[k].value.split("@");
+						for (var e = 0; e < attributesArr.length; e++) {
+							if (attributesArr[e].name === "customAttribute5") {
+								materialGrp4 = attributesArr[e].value.split("@");
 							}
 						}
 
-						for (var k = 0; k < attributesArr.length; k++) {
-							if (attributesArr[k].name === "customAttribute6") {
-								custNoArr = attributesArr[k].value.split("@");
+						for (var f = 0; f < attributesArr.length; f++) {
+							if (attributesArr[f].name === "customAttribute6") {
+								custNoArr = attributesArr[f].value.split("@");
 							}
 						}
 					}
@@ -253,40 +253,15 @@ sap.ui.define([
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			var that = this;
-			var itemsPerPage, totalResult;
+			// var itemsPerPage, totalResult;
 
 			var fData = [];
-			// var aData = jQuery.ajax({
-			// 	type: "GET",
-			// 	contentType: "application/json",
-			// 	url: "/DKSHJavaService/dac/getUsers/1&100",
-			// 	dataType: "json",
-			// 	async: false,
-			// 	success: function (data, textStatus, jqXHR) {
-			// 		var resultData = data;
-			// 		itemsPerPage = 100;
-			// 		totalResult = resultData.totalResults;
-			// 	},
-			// 	error: function (textStatus, jqXHR) {
-			// 		sap.m.MessageToast.show("Error in Retrieving All Users");
-			// 		oBusyDialog.close();
-			// 	}
-
-			// });
-
-			// for (var startInd = 0; startInd * itemsPerPage < totalResult; startInd++) {
-
-			var aData = jQuery.ajax({
-				type: "GET",
-				contentType: "application/json",
-				url: "/DKSHJavaService/userDetails/getUsers",
-				// url: "/DKSHJavaService/dac/getUsers/" + startInd * itemsPerPage + "&100",
-				/*	url: "/DKSHJavaService/dac/getUsers/101&100",*/
-				dataType: "json",
-				async: false,
-				success: function (data, textStatus, jqXHR) {
-					var resultData = data;
-
+			var sURI = '/IDPService/service/scim/Users?filter=groups.display co "DKSH_"';
+			this.getOwnerComponent().getApiModel("CCUsers", sURI).then(
+				function (oData) {
+					var resultData = {
+						resources: oData.Resources ? oData.Resources : null
+					};
 					if (resultData.resources) {
 						if (value)
 							sap.m.MessageToast.show("Sync of HANA and IAS users are done successfully");
@@ -294,14 +269,14 @@ sap.ui.define([
 						for (var i = 0; i < resultData.resources.length; i++) {
 							var phoneNo = "";
 							var country = "";
-							if (resultData.resources[i].phoneNumbers !== null) {
-								if (resultData.resources[i].phoneNumbers[0] !== undefined) {
+							if (resultData.resources[i].phoneNumbers) {
+								if (resultData.resources[i].phoneNumbers.length > 0) {
 									phoneNo = resultData.resources[i].phoneNumbers[0].value;
 								}
 							}
 							// country
-							if (resultData.resources[i].addresses !== null) {
-								if (resultData.resources[i].addresses[0] !== undefined) {
+							if (resultData.resources[i].addresses) {
+								if (resultData.resources[i].addresses.length > 0) {
 									country = resultData.resources[i].addresses[0].country;
 								}
 							}
@@ -313,54 +288,55 @@ sap.ui.define([
 							var materialGrp4 = [];
 							var custNoArr = [];
 							var materialGrpOne = [];
-							if (resultData.resources[i]["userCustomAttributes"] !== null) {
-								var attributesArr = resultData.resources[i]["userCustomAttributes"].attributes;
+							if (resultData.resources[i].userCustomAttributes) {
+								var attributesArr = resultData.resources[i].userCustomAttributes.attributes;
 
-								for (var k = 0; k < attributesArr.length; k++) {
-									if (attributesArr[k].name === "customAttribute1") {
-										salesOrgArr = attributesArr[k].value.split("@");
+								for (var a = 0; a < attributesArr.length; a++) {
+									if (attributesArr[a].name === "customAttribute1") {
+										salesOrgArr = attributesArr[a].value.split("@");
 									}
 								}
 
-								for (var k = 0; k < attributesArr.length; k++) {
-									if (attributesArr[k].name === "customAttribute2") {
-										distributionChannel = attributesArr[k].value.split("@");
+								for (var b = 0; b < attributesArr.length; b++) {
+									if (attributesArr[b].name === "customAttribute2") {
+										distributionChannel = attributesArr[b].value.split("@");
 									}
 								}
 
-								for (var k = 0; k < attributesArr.length; k++) {
-									if (attributesArr[k].name === "customAttribute3") {
-										district = attributesArr[k].value.split("@");
+								for (var c = 0; c < attributesArr.length; c++) {
+									if (attributesArr[c].name === "customAttribute3") {
+										district = attributesArr[c].value.split("@");
 									}
 								}
 
-								for (var k = 0; k < attributesArr.length; k++) {
-									if (attributesArr[k].name === "customAttribute4") {
-										materialGrp = attributesArr[k].value.split("@");
+								for (var d = 0; d < attributesArr.length; d++) {
+									if (attributesArr[d].name === "customAttribute4") {
+										materialGrp = attributesArr[d].value.split("@");
 									}
 								}
 
-								for (var k = 0; k < attributesArr.length; k++) {
-									if (attributesArr[k].name === "customAttribute5") {
-										materialGrp4 = attributesArr[k].value.split("@");
+								for (var e = 0; e < attributesArr.length; e++) {
+									if (attributesArr[e].name === "customAttribute5") {
+										materialGrp4 = attributesArr[e].value.split("@");
 									}
 								}
 
-								for (var k = 0; k < attributesArr.length; k++) {
-									if (attributesArr[k].name === "customAttribute6") {
-										custNoArr = attributesArr[k].value.split("@");
+								for (var f = 0; f < attributesArr.length; f++) {
+									if (attributesArr[f].name === "customAttribute6") {
+										custNoArr = attributesArr[f].value.split("@");
 									}
 								}
 
 							}
 							finalData.push({
 								groups: resultData.resources[i].groups,
-								id: resultData.resources[i].id,
+								id: resultData.resources[i]["urn:ietf:params:scim:schemas:extension:sap:2.0:User"].userId,
 								familyName: resultData.resources[i].name.familyName,
 								givenName: resultData.resources[i].name.givenName,
 								emails: resultData.resources[i].emails[0].value,
 								FullName: resultData.resources[i].name.givenName + " " + resultData.resources[i].name.familyName,
 								phoneNumbers: phoneNo,
+								schemas: resultData.resources[i].schemas,
 								country: country,
 								SalesOrganization: salesOrgArr,
 								CustomerNumber: custNoArr,
@@ -383,8 +359,8 @@ sap.ui.define([
 							return true;
 						});
 
-						merged.sort(function (a, b) {
-							return (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0);
+						merged.sort(function (j, k) {
+							return (j.id > k.id) ? 1 : ((k.id > j.id) ? -1 : 0);
 						});
 						var msgTotal = that.i18nModel.getProperty("userDetails");
 						that.getView().byId("ID_TXT_HDR").setText(msgTotal + " (" + merged.length + ")");
@@ -395,26 +371,16 @@ sap.ui.define([
 						that.getView().byId("ID_TABLE_USR").setModel(oModelData, "UsetTableSet");
 						oBusyDialog.close();
 
-						/*	that.getView().byId("ID_TXT_HDR").setText(msgTotal + " (" + finalData.length + ")");
-							var oModelData = new sap.ui.model.json.JSONModel({
-								results: finalData
-							});
-							oModelData.setSizeLimit(finalData.length);
-							that.getView().byId("ID_TABLE_USR").setModel(oModelData, "UsetTableSet");
-							oBusyDialog.close();*/
 					} else {
 						sap.m.MessageToast.show("Error in Retrieving All Users");
 						oBusyDialog.close();
 					}
 				},
-				error: function (jqXHR, textStatus, errorThrown) {
+				function (oError) {
 					sap.m.MessageToast.show("Error in Retrieving All Users");
 					oBusyDialog.close();
 				}
-			});
-
-			// }
-
+			);
 		},
 
 		refreshBtnUser: function () {
@@ -449,7 +415,7 @@ sap.ui.define([
 			var groupArr = [];
 			if (selectObj.groups !== null) {
 				for (var i = 0; i < selectObj.groups.length; i++) {
-					groupArr.push(selectObj.groups[i].value);
+					groupArr.push(selectObj.groups[i].display);
 				}
 			}
 			var oModel = new sap.ui.model.json.JSONModel({
@@ -465,6 +431,7 @@ sap.ui.define([
 				selectedCountry: selectObj.country ? selectObj.country : "",
 				countryValueState: "None",
 				phoneNo: selectObj.phoneNumbers ? selectObj.phoneNumbers : "",
+				schemas: selectObj.schemas,
 				SalesOrganization: selectObj.SalesOrganization,
 				CustomerNumber: selectObj.CustomerNumber,
 				DistributionChannel: selectObj.DistributionChannel,
@@ -475,7 +442,7 @@ sap.ui.define([
 			});
 			sap.ui.getCore().setModel(oModel, "UpdateCreateUserModelSet");
 
-			if (oEvent.getSource().mProperties.src === "sap-icon://display") {
+			if (oEvent.getSource().getProperty("src") === "sap-icon://display") {
 				var oModelCrUpd = new sap.ui.model.json.JSONModel({
 					UpdateCreateInd: "Display",
 					Create: false,

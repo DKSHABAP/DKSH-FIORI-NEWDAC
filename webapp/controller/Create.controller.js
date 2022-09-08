@@ -318,7 +318,7 @@ sap.ui.define([
 		//function to fetch the country list
 		getCountryList: function () {
 			var that = this;
-			var oURL = "/IDPService/md/countries";
+			var oURL = "/IDPService/md/md/countries";
 			var oModel = new sap.ui.model.json.JSONModel();
 			var oData = "";
 			var oDataArr = [];
@@ -1992,7 +1992,8 @@ sap.ui.define([
 				//"passwordPolicy": "https://accounts.sap.com/policy/passwords/sap/enterprise/1.0",
 				"active": true,
 				"sendMail": "false",
-				"mailVerified": "true"
+				"mailVerified": "true",
+				"schemas": oUserDetail.schemas
 			};
 			var oHeader = {
 				"Content-Type": "application/scim+json"

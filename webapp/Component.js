@@ -75,10 +75,10 @@ sap.ui.define([
 												}
 											}
 										);
-										fnResolve(oData.Resources);
+										fnResolve(oData);
 									});
 								} else {
-									fnResolve(oData.Resources);
+									fnResolve(oData);
 								}
 							}
 						).catch(
