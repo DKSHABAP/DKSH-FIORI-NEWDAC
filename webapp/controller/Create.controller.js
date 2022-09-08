@@ -318,7 +318,7 @@ sap.ui.define([
 		//function to fetch the country list
 		getCountryList: function () {
 			var that = this;
-			var oURL = "/IDPService/md/md/countries";
+			var oURL = "/IDPService/md/countries";
 			var oModel = new sap.ui.model.json.JSONModel();
 			var oData = "";
 			var oDataArr = [];
@@ -351,107 +351,10 @@ sap.ui.define([
 			});
 		},
 
-		// TEMP-TEST 18082022 (begin)
-		onHandleGroupList: function (oStartIndex) {
-			var that = this;
-			this.onFetchGroupList(oStartIndex, function (oResponse) {
-				if (oResponse.callfunction === "success") {
-					var oStartIndexNext;
-					var aData = oResponse.datareturn;
-					var totalItem = aData.totalResults;
-					var resource = aData.Resources;
-					var lastIndexResrc = resource.length;
-
-					if (that.garrGroupsOri.length === 0) {
-						that.gvarItemAll = totalItem;
-						that.garrGroupsOri = resource;
-						that.gvarItemCounts = lastIndexResrc + 1;
-						that.onHandleGroupList(that.gvarItemCounts);
-					} else {
-						that.gvarItemCounts = that.gvarItemCounts + lastIndexResrc;
-						if (that.garrGroupsOri.length < parseInt(that.gvarItemAll, 10) && that.garrGroupsOri.length !== parseInt(that.gvarItemAll, 10)) {
-							for (var i = 0; i < resource.length; i++) {
-								that.garrGroupsOri.push(resource[i]);
-								if (resource.length === i + 1) {
-									oStartIndexNext = that.gvarItemCounts;
-									if (that.garrGroupsOri.length === parseInt(that.gvarItemAll, 10)) {
-										var oArrayGroup = JSON.parse(JSON.stringify(that.garrGroupsOri));
-										// Here modify check array users call function 
-										that.onBindGroupList(oArrayGroup);
-									} else {
-										that.onHandleGroupList(oStartIndexNext);
-									}
-								}
-							}
-						}
-					}
-				} else if (oResponse.callfunction === "error") {
-					sap.m.MessageToast.show("Test Error in Retrieving All Users");
-				}
-			});
-		},
-		// TEMP-TEST 18082022 (end)
-
-		// TEMP-TEST 18082022 (begin)
-		onBindGroupList: function (oArrayGroup) {
-			var that = this;
-			var finalData = [];
-			for (var i = 0; i < oArrayGroup.length; i++) {
-				var oKey = oArrayGroup[i]["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].name;
-				if (oKey.startsWith("DKSH-API") === false) {
-					finalData.push({
-						key: oArrayGroup[i]["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].name,
-						desc: oArrayGroup[i]["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].description
-					});
-				}
-			}
-			var groupModel = new sap.ui.model.json.JSONModel({
-				results: finalData
-			});
-			groupModel.setSizeLimit(finalData.length);
-			that.getView().setModel(groupModel, "GroupModelSet");
-		},
-		// TEMP-TEST 18082022 (end)
-
-		// TEMP-TEST 18082022 (begin)
-		onFetchGroupList: function (oStartIndex, oCallback) {
-			// Refer URL : 1."/IDPService/service/scim/Groups" 2."/IDPService/scim/Groups" & parameters ?count=120&startIndex=50
-			var oBusyDialog = new sap.m.BusyDialog();
-			oBusyDialog.open();
-			var oResponse = [];
-			jQuery.ajax({
-				type: "GET",
-				url: "/IDPService/scim/Groups",
-				data: {
-					startIndex: oStartIndex
-				},
-				// contentType: "application/json",
-				// dataType: "json",
-				async: false,
-				success: function (data, textStatus, jqXHR) {
-					oBusyDialog.close();
-					oResponse = {
-						callfunction: "success",
-						datareturn: data
-					};
-					oCallback(oResponse);
-				},
-				error: function (jqXHR, textStatus, errorThrown) {
-					oBusyDialog.close();
-					oResponse = {
-						callfunction: "error",
-						datareturn: []
-					};
-					oCallback(oResponse);
-				}
-			});
-		},
-		// TEMP-TEST 18082022 (end)
-
 		//function to fetch the group list
 		getGroupList: function () {
 			var that = this;
-			var sURL = '/IDPService/service/scim/Groups?filter=displayName co "DKSH_"';
+			var sURL = '/UserManagement/scim/Groups?filter=displayName co "DKSH_"';
 			var finalData = [];
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
@@ -1846,7 +1749,7 @@ sap.ui.define([
 			}
 
 			var oUserDetail = this.getView().byId("ID_PROV_SIMF_USER_DET").getModel("UserModelSet").getData();
-			var idUser = oUserDetail.id;
+			var idUser = oUserDetail.uuId;
 			var firstName = oUserDetail.firstName.trim();
 			var lastName = oUserDetail.lastName.trim();
 			var email = oUserDetail.email.trim();
@@ -1941,10 +1844,10 @@ sap.ui.define([
 
 			//	if (sFlagCheck) {
 			//	if (true) {
-			var sUrl = "/IDPService/service/scim/Users/" + idUser;
+			var sUrl = "/UserManagement/scim/Users/" + idUser;
 			var oPayload = {
 				"id": idUser,
-				"groups": groupsTemp,
+				// "groups": groupsTemp,
 				"userName": fullName,
 				"name": {
 					"givenName": firstName,
@@ -1991,8 +1894,8 @@ sap.ui.define([
 				//"password": "Resetme1",
 				//"passwordPolicy": "https://accounts.sap.com/policy/passwords/sap/enterprise/1.0",
 				"active": true,
-				"sendMail": "false",
-				"mailVerified": "true",
+				// "sendMail": "false",
+				// "mailVerified": "true"
 				"schemas": oUserDetail.schemas
 			};
 			var oHeader = {
