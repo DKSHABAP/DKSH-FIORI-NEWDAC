@@ -1928,7 +1928,8 @@ sap.ui.define([
 			oCreateUserModel.attachRequestFailed(function (oEvent) {
 				oBusyDialog.close();
 				var sMsg = oEvent.getParameters().responseText;
-				sap.m.MessageBox.error(sMsg, {
+				var oError = JSON.parse(sMsg);
+				sap.m.MessageBox.error(oError.detail ? oError.detail : oError, {
 					styleClass: "sapUiSizeCompact"
 				});
 			});
