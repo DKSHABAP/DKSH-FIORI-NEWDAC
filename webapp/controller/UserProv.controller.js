@@ -157,12 +157,12 @@ sap.ui.define([
 						oBusyDialog.close();
 
 					} else {
-						sap.m.MessageToast.show(this.i18nModel.getResourceBundle().getText("syncNok"));
+						sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncNok"));
 						oBusyDialog.close();
 					}
 				},
 				function (oError) {
-					sap.m.MessageToast.show(this.i18nModel.getResourceBundle().getText("syncNok"));
+					sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncNok"));
 					oBusyDialog.close();
 				}
 			);
