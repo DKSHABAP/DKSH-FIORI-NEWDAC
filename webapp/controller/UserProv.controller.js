@@ -298,6 +298,8 @@ sap.ui.define([
 			this.oModelMaterial = this.getView().getModel("MaterialModel");
 			this.getView().byId("ID_PAGE_USER_PR").setVisible(false);
 			this.getView().byId("ID_PAGE_USER_PR").setVisible(true);
+			var sURL = '/UserManagement/scim/Groups?filter=displayName co "DKSH_"';
+			this.getOwnerComponent().getApiModel("CCGroups", sURL, false);			
 		},
 
 		//function to open Reset password confirmation box
