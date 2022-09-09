@@ -364,7 +364,7 @@ sap.ui.define([
 				},
 				function (oError) {
 					oBusyDialog.close();
-					sap.m.MessageBox.error(oError, {
+					sap.m.MessageBox.error(oError.detail ? oError.detail : oError, {
 						styleClass: "sapUiSizeCompact"
 					});
 				}
