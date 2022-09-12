@@ -40,7 +40,7 @@ sap.ui.define([
 			oBusyDialog.open();
 			var that = this;
 			var fData = [];
-			var sURI = '/UserManagement/scim/Users?filter=groups.display co "DKSH_"';
+			var sURI = '/UserManagement/scim/Users';
 			this.getOwnerComponent().getApiModel("CCUsers", sURI, value === "sync" ).then(
 				function (oData) {
 					var resultData = {
@@ -298,7 +298,7 @@ sap.ui.define([
 			this.oModelMaterial = this.getView().getModel("MaterialModel");
 			this.getView().byId("ID_PAGE_USER_PR").setVisible(false);
 			this.getView().byId("ID_PAGE_USER_PR").setVisible(true);
-			var sURL = '/UserManagement/scim/Groups?filter=displayName co "DKSH_"';
+			var sURL = '/UserManagement/scim/Groups';
 			this.getOwnerComponent().getApiModel("CCGroups", sURL, false);			
 		},
 

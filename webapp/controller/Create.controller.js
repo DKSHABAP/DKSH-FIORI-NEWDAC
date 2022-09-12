@@ -343,7 +343,7 @@ sap.ui.define([
 		//function to fetch the group list
 		getGroupList: function () {
 			var that = this;
-			var sURL = '/UserManagement/scim/Groups?filter=displayName co "DKSH_"';
+			var sURL = '/UserManagement/scim/Groups';
 			var finalData = [];
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
