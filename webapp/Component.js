@@ -94,6 +94,14 @@ sap.ui.define([
 				);
 			}
 			return this.oApiModel[sModel];
+		},
+		
+		/** 
+		 * @public
+		 * @override
+		 */
+		destroy: function(){
+			this.oApiModel = {};
 		}
 	});
 });
