@@ -352,7 +352,7 @@ sap.ui.define([
 					oBusyDialog.close();
 					for (var i = 0; i < oData.Resources.length; i++) {
 						finalData.push({
-							key: oData.Resources[i]["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].name,
+							key: oData.Resources[i].displayName,
 							desc: oData.Resources[i]["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].description
 						});
 					}
@@ -1823,116 +1823,127 @@ sap.ui.define([
 
 			//add groups
 			var groupsTemp = [];
-			for (var i = 0; i < grpSelected.length; i++) {
-				groupsTemp.push({
-					"value": grpSelected[i],
-					"display": grpSelected[i]
-				});
-			}
+			// for (var i = 0; i < grpSelected.length; i++) {
+			// 	groupsTemp.push({
+			// 		"value": grpSelected[i],
+			// 		"display": grpSelected[i]
+			// 	});
+			// }
 
-			//	if (sFlagCheck) {
-			//	if (true) {
-			var sUrl = "/UserManagement/scim/Users/" + idUser;
-			var oPayload = {
-				"id": idUser,
-				// "groups": groupsTemp,
-				"userName": fullName,
-				"name": {
-					"givenName": firstName,
-					"familyName": lastName
-				},
-				"emails": [{
-					"value": email
-				}],
-				"displayName": firstName + " " + lastName,
-				"addresses": [{
-					"type": "home",
-					"country": selectedCountry
-				}],
-				"phoneNumbers": [{
-					"value": phoneNo,
-					"type": "mobile"
-				}],
-				// "urn:sap:cloud:scim:schemas:extension:custom:2.0:User": {
-				// 	"attributes": [{
-				// 			"name": "customAttribute1",
-				// 			"value": salesOrgArrTemp.join("@")
-				// 		}, {
-				// 			"name": "customAttribute2",
-				// 			"value": distribuChannleTemp.join("@")
-				// 		}, {
-				// 			"name": "customAttribute3",
-				// 			"value": districtTemp.join("@")
-				// 		}, {
-				// 			"name": "customAttribute4",
-				// 			"value": materialGrpTemp.join("@")
-				// 		}, {
-				// 			"name": "customAttribute5",
-				// 			"value": materialGrp4Temp.join("@")
-				// 		}, {
-				// 			"name": "customAttribute6",
-				// 			"value": custNoArrTemp.join("@")
-				// 		}
-				// 		/*, {
-				// 													"name": "customAttribute7",
-				// 													"value": materialGrpOneTemp.join("@")
-				// 												}*/
-				// 	]
-				// },
-				//"password": "Resetme1",
-				//"passwordPolicy": "https://accounts.sap.com/policy/passwords/sap/enterprise/1.0",
-				"active": true,
-				// "sendMail": "false",
-				// "mailVerified": "true"
-				"schemas": oUserDetail.schemas
-			};
-			var oHeader = {
-				"Content-Type": "application/scim+json"
-			};
-			var oCreateUserModel = new sap.ui.model.json.JSONModel();
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
-			oCreateUserModel.loadData(sUrl, JSON.stringify(oPayload), true, "PUT", false, false, oHeader);
-			oCreateUserModel.attachRequestCompleted(function (oEvent) {
-				oBusyDialog.close();
-				if (oEvent.getParameter("success")) {
-					sap.m.MessageToast.show(oEvent.getSource().getData().id + " User changes is updated successfully");
-					var oModelRef = new sap.ui.model.json.JSONModel({
-						refreshUser: true
+			var sURL = "/UserManagement/scim/Groups";
+			this.getOwnerComponent().getApiModel("Groups", sURL, false)
+				.then(function (oData) {
+					oData.Resources.forEach(function (oResource, iIndex) {
+						if (jQuery.inArray(oResource.displayName, grpSelected) !== -1) {
+							groupsTemp.push(oResource["urn:sap:cloud:scim:schemas:extension:custom:2.0:Group"].name);
+						}
 					});
-					sap.ui.getCore().setModel(oModelRef, "refreshUserModel");
-					var router = sap.ui.core.UIComponent.getRouterFor(that);
-					router.navTo("RouteUserProv");
-					var postData = {
-						"userId": oEvent.getSource().getData().id,
-						"email": email,
-						"country": countryName,
-						"userGroup": grps,
-						"firstName": firstName,
-						"lastName": lastName
+					grps = groupsTemp.join(",");
+					//	if (sFlagCheck) {
+					//	if (true) {
+					var sUrl = "/UserManagement/scim/Users/" + idUser;
+					var oPayload = {
+						"id": idUser,
+						// "groups": groupsTemp,
+						"userName": fullName,
+						"name": {
+							"givenName": firstName,
+							"familyName": lastName
+						},
+						"emails": [{
+							"value": email
+						}],
+						"displayName": firstName + " " + lastName,
+						"addresses": [{
+							"type": "home",
+							"country": selectedCountry
+						}],
+						"phoneNumbers": [{
+							"value": phoneNo,
+							"type": "mobile"
+						}],
+						// "urn:sap:cloud:scim:schemas:extension:custom:2.0:User": {
+						// 	"attributes": [{
+						// 			"name": "customAttribute1",
+						// 			"value": salesOrgArrTemp.join("@")
+						// 		}, {
+						// 			"name": "customAttribute2",
+						// 			"value": distribuChannleTemp.join("@")
+						// 		}, {
+						// 			"name": "customAttribute3",
+						// 			"value": districtTemp.join("@")
+						// 		}, {
+						// 			"name": "customAttribute4",
+						// 			"value": materialGrpTemp.join("@")
+						// 		}, {
+						// 			"name": "customAttribute5",
+						// 			"value": materialGrp4Temp.join("@")
+						// 		}, {
+						// 			"name": "customAttribute6",
+						// 			"value": custNoArrTemp.join("@")
+						// 		}
+						// 		/*, {
+						// 													"name": "customAttribute7",
+						// 													"value": materialGrpOneTemp.join("@")
+						// 												}*/
+						// 	]
+						// },
+						//"password": "Resetme1",
+						//"passwordPolicy": "https://accounts.sap.com/policy/passwords/sap/enterprise/1.0",
+						"active": true,
+						// "sendMail": "false",
+						// "mailVerified": "true"
+						"schemas": oUserDetail.schemas
 					};
-					jQuery.ajax({
-						type: "PUT",
-						data: JSON.stringify(postData),
-						contentType: "application/json",
-						url: "/DKSHJavaService/userDetails/updateUser",
-						dataType: "json",
-						async: false,
-						success: function (data, textStatus, jqXHR) {},
-						error: function (data, textStatus, jqXHR) {}
-					});
-				} else {
+					var oHeader = {
+						"Content-Type": "application/scim+json"
+					};
+					var oCreateUserModel = new sap.ui.model.json.JSONModel();
+					oCreateUserModel.loadData(sUrl, JSON.stringify(oPayload), true, "PUT", false, false, oHeader);
+					oCreateUserModel.attachRequestCompleted(function (oEvent) {
+						oBusyDialog.close();
+						if (oEvent.getParameter("success")) {
+							sap.m.MessageToast.show(oEvent.getSource().getData().id + " User changes is updated successfully");
+							var oModelRef = new sap.ui.model.json.JSONModel({
+								refreshUser: true
+							});
+							sap.ui.getCore().setModel(oModelRef, "refreshUserModel");
+							var router = sap.ui.core.UIComponent.getRouterFor(that);
+							router.navTo("RouteUserProv");
+							var postData = {
+								"userId": oEvent.getSource().getData().id,
+								"email": email,
+								"country": countryName,
+								"userGroup": grps,
+								"firstName": firstName,
+								"lastName": lastName
+							};
+							jQuery.ajax({
+								type: "PUT",
+								data: JSON.stringify(postData),
+								contentType: "application/json",
+								url: "/DKSHJavaService/userDetails/updateUser",
+								dataType: "json",
+								async: false,
+								success: function (data, textStatus, jqXHR) {},
+								error: function (data, textStatus, jqXHR) {}
+							});
+						} else {
 
-				}
-			});
-			oCreateUserModel.attachRequestFailed(function (oEvent) {
-				oBusyDialog.close();
-				var sMsg = oEvent.getParameters().responseText;
-				var oError = JSON.parse(sMsg);
-				sap.m.MessageBox.error(oError.detail ? oError.detail : oError, {
-					styleClass: "sapUiSizeCompact"
+						}
+					});
+					oCreateUserModel.attachRequestFailed(function (oEvent) {
+						oBusyDialog.close();
+						var sMsg = oEvent.getParameters().responseText;
+						var oError = JSON.parse(sMsg);
+						sap.m.MessageBox.error(oError.detail ? oError.detail : oError, {
+							styleClass: "sapUiSizeCompact"
+						});
+					});
+
 				});
-			});
 		},
 
 		//on chnage sales organization switch

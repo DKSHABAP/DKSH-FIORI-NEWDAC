@@ -299,7 +299,9 @@ sap.ui.define([
 			this.getView().byId("ID_PAGE_USER_PR").setVisible(false);
 			this.getView().byId("ID_PAGE_USER_PR").setVisible(true);
 			var sURL = '/UserManagement/scim/Groups?filter=displayName co "DKSH_CC"';
-			this.getOwnerComponent().getApiModel("CCGroups", sURL, false);			
+			this.getOwnerComponent().getApiModel("CCGroups", sURL, false);
+			sURL = "/UserManagement/scim/Groups";
+			this.getOwnerComponent().getApiModel("Groups", sURL, false);
 		},
 
 		//function to open Reset password confirmation box
