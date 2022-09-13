@@ -1913,7 +1913,7 @@ sap.ui.define([
 							var router = sap.ui.core.UIComponent.getRouterFor(that);
 							router.navTo("RouteUserProv");
 							var postData = {
-								"userId": oEvent.getSource().getData().id,
+								"userId": oUserDetail.id,
 								"email": email,
 								"country": countryName,
 								"userGroup": grps,
