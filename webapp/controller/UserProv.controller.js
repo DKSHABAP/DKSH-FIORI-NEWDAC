@@ -26,7 +26,7 @@ sap.ui.define([
 			if (oEvent.getParameter("name") === "RouteUserProv") {
 				if (refrs.refreshUser) {
 					this.getView().byId("ID_PROV_USER_DET_M").setValue("");
-					this.getAllUsers();
+					this.getAllUsers("sync");
 					var oModelRef = new sap.ui.model.json.JSONModel({
 						refreshUser: false
 					});
