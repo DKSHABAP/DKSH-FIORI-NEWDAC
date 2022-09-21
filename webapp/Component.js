@@ -102,6 +102,7 @@ sap.ui.define([
 		 */
 		destroy: function(){
 			this.oApiModel = {};
+			UIComponent.prototype.destroy.apply(this, arguments);
 		}
 	});
 });
