@@ -1,249 +1,249 @@
 {
-    "_version": "1.12.0",
-    "sap.app": {
-        "id": "com.incture.cherrywork.newdac",
-        "type": "application",
-        "i18n": "i18n/i18n.properties",
-        "applicationVersion": {
-            "version": "1.0.0"
-        },
-        "title": "{{appTitle}}",
-        "description": "{{appDescription}}",
-        "sourceTemplate": {
-            "id": "servicecatalog.connectivityComponentForManifest",
-            "version": "0.0.0"
-        },
-        "dataSources": {
-            "ZDKSH_CC_HDR_LOOKUP_SRV": {
-                "uri": "/DKSHODataService/sap/opu/odata/sap/ZDKSH_CC_HDR_LOOKUP_SRV/",
-                "type": "OData",
-                "settings": {
-                    "localUri": "localService/metadata.xml"
-                }
-            },
-            "ZDKSH_CC_DAC_MATLOOKUP_SRV": {
-                "uri": "/DKSHODataService/sap/opu/odata/sap/ZDKSH_CC_DAC_MATLOOKUP_SRV/",
-                "type": "OData",
-                "settings": {
-                    "localUri": "localService/ZDKSH_CC_DAC_MATLOOKUP_SRV/metadata.xml"
-                }
-            },
-            "po_data": {
-                "uri": "model/empdata.json",
-                "type": "JSON"
-            }
-        }
-    },
-    "sap.ui": {
-        "technology": "UI5",
-        "icons": {
-            "icon": "",
-            "favIcon": "",
-            "phone": "",
-            "phone@2": "",
-            "tablet": "",
-            "tablet@2": ""
-        },
-        "deviceTypes": {
-            "desktop": true,
-            "tablet": true,
-            "phone": true
-        }
-    },
-    "sap.ui5": {
-        "flexEnabled": false,
-        "rootView": {
-            "viewName": "com.incture.cherrywork.newdac.view.App",
-            "type": "XML",
-            "async": true,
-            "id": "app"
-        },
-        "dependencies": {
-            "minUI5Version": "1.78.0",
-            "libs": {
-                "sap.m": {
-                    "minVersion": "1.78.0"
-                },
-                "sap.ui.layout": {
-                    "minVersion": "1.78.0"
-                },
-                "sap.ui.core": {
-                    "minVersion": "1.78.0"
-                }
-            }
-        },
-        "contentDensities": {
-            "compact": true,
-            "cozy": true
-        },
-        "models": {
-            "i18n": {
-                "type": "sap.ui.model.resource.ResourceModel",
-                "settings": {
-                    "bundleName": "com.incture.cherrywork.newdac.i18n.i18n"
-                }
-            },
-            "SalesOrganization": {
-                "type": "sap.ui.model.odata.v2.ODataModel",
-                "settings": {
-                    "defaultOperationMode": "Server",
-                    "defaultBindingMode": "OneWay",
-                    "defaultCountMode": "Request",
-                    "useBatch": false
-                },
-                "dataSource": "ZDKSH_CC_HDR_LOOKUP_SRV",
-                "preload": true
-            },
-            "MaterialModel": {
-                "type": "sap.ui.model.odata.v2.ODataModel",
-                "settings": {
-                    "defaultOperationMode": "Server",
-                    "defaultBindingMode": "OneWay",
-                    "defaultCountMode": "Request",
-                    "useBatch": false
-                },
-                "dataSource": "ZDKSH_CC_DAC_MATLOOKUP_SRV",
-                "preload": true
-            },
-            "pomodel": {
-                "type": "sap.ui.model.json.JSONModel",
-                "dataSource": "po_data"
-            },
-            "aPOModel": {
-                "type": "sap.ui.model.json.JSONModel"
-            }
-        },
-        "resources": {
-            "css": [
-                {
-                    "uri": "css/style.css"
-                }
-            ]
-        },
-        "routing": {
-            "config": {
-                "routerClass": "sap.m.routing.Router",
-                "viewType": "XML",
-                "async": true,
-                "viewPath": "com.incture.cherrywork.newdac.view",
-                "controlAggregation": "pages",
-                "controlId": "app",
-                "clearControlAggregation": false
-            },
-            "routes": [
-                {
-                    "name": "RouteUserProv",
-                    "pattern": "",
-                    "target": [
-                        "TargetUserProv"
-                    ]
-                },
-                {
-                    "name": "Create",
-                    "pattern": "Create({contextPath})",
-                    "target": [
-                        "Create"
-                    ]
-                },
-                {
-                    "name": "SplitApp",
-                    "pattern": "SplitApp",
-                    "target": [
-                        "masterView",
-                        "detailViewP"
-                    ]
-                },
-                {
-                    "name": "masterView",
-                    "pattern": "masterView",
-                    "target": [
-                        "masterView",
-                        "detailViewP"
-                    ]
-                },
-                {
-                    "name": "CreatePermissionObject",
-                    "pattern": "CreatePermissionObject",
-                    "target": [
-                        "CreatePermissionObject"
-                    ]
-                },
-                {
-                    "name": "EditPermissionObject",
-                    "pattern": "EditPermissionObject",
-                    "target": [
-                        "EditPermissionObject",
-                        "masterView"
-                    ]
-                },
-                {
-                    "name": "detailViewP",
-                    "pattern": "detailViewP/{pid}",
-                    "target": [
-                        "detailViewP",
-                        "masterView"
-                    ]
-                }
-            ],
-            "targets": {
-                "TargetUserProv": {
-                    "viewType": "XML",
-                    "transition": "slide",
-                    "clearControlAggregation": false,
-                    "viewId": "UserProv",
-                    "viewName": "UserProv"
-                },
-                "Create": {
-                    "viewType": "XML",
-                    "viewName": "Create"
-                },
-                "App": {
-                    "viewType": "XML",
-                    "viewName": "App"
-                },
-                "SplitApp": {
-                    "viewType": "XML",
-                    "viewName": "SplitApp"
-                },
-                "masterView": {
-                    "viewType": "XML",
-                    "viewName": "PermissionObjectMaster",
-                    "viewLevel": 1,
-                    "viewId": "masterPageId",
-                    "parent": "SplitApp",
-                    "controlId": "idSplitAppControl",
-                    "clearControlAggregation": false,
-                    "controlAggregation": "masterPages"
-                },
-                "detailViewP": {
-                    "viewType": "XML",
-                    "viewName": "PermissionObjectDetail",
-                    "viewLevel": 1,
-                    "viewId": "detailPageId",
-                    "parent": "SplitApp",
-                    "controlId": "idSplitAppControl",
-                    "clearControlAggregation": false,
-                    "controlAggregation": "detailPages"
-                },
-                "CreatePermissionObject": {
-                    "viewType": "XML",
-                    "viewName": "CreatePermissionObject"
-                },
-                "EditPermissionObject": {
-                    "viewType": "XML",
-                    "viewName": "EditPermissionObject",
-                    "viewLevel": 1,
-                    "viewId": "editPageId",
-                    "parent": "SplitApp",
-                    "controlId": "idSplitAppControl",
-                    "clearControlAggregation": false,
-                    "controlAggregation": "detailPages"
-                }
-            }
-        }
-    },
-    "sap.platform.hcp": {
-        "uri": "webapp",
-        "_version": "1.1.0"
-    }
+	"_version": "1.12.0",
+	"sap.app": {
+		"id": "com.incture.cherrywork.newdac",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"sourceTemplate": {
+			"id": "servicecatalog.connectivityComponentForManifest",
+			"version": "0.0.0"
+		},
+		"dataSources": {
+			"ZDKSH_CC_HDR_LOOKUP_SRV": {
+				"uri": "/DKSHODataService/sap/opu/odata/sap/ZDKSH_CC_HDR_LOOKUP_SRV/",
+				"type": "OData",
+				"settings": {
+					"localUri": "localService/metadata.xml"
+				}
+			},
+			"ZDKSH_CC_DAC_MATLOOKUP_SRV": {
+				"uri": "/DKSHODataService/sap/opu/odata/sap/ZDKSH_CC_DAC_MATLOOKUP_SRV/",
+				"type": "OData",
+				"settings": {
+					"localUri": "localService/ZDKSH_CC_DAC_MATLOOKUP_SRV/metadata.xml"
+				}
+			},
+			"po_data": {
+				"uri": "model/empdata.json",
+				"type": "JSON"
+			}
+		}
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {
+			"icon": "",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.ui5": {
+		"flexEnabled": false,
+		"rootView": {
+			"viewName": "com.incture.cherrywork.newdac.view.App",
+			"type": "XML",
+			"async": true,
+			"id": "app"
+		},
+		"dependencies": {
+			"minUI5Version": "1.78.0",
+			"libs": {
+				"sap.m": {
+					"minVersion": "1.78.0"
+				},
+				"sap.ui.layout": {
+					"minVersion": "1.78.0"
+				},
+				"sap.ui.core": {
+					"minVersion": "1.78.0"
+				}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "com.incture.cherrywork.newdac.i18n.i18n"
+				}
+			},
+			"SalesOrganization": {
+				"type": "sap.ui.model.odata.v2.ODataModel",
+				"settings": {
+					"defaultOperationMode": "Server",
+					"defaultBindingMode": "OneWay",
+					"defaultCountMode": "Request",
+					"useBatch": false
+				},
+				"dataSource": "ZDKSH_CC_HDR_LOOKUP_SRV",
+				"preload": true
+			},
+			"MaterialModel": {
+				"type": "sap.ui.model.odata.v2.ODataModel",
+				"settings": {
+					"defaultOperationMode": "Server",
+					"defaultBindingMode": "OneWay",
+					"defaultCountMode": "Request",
+					"useBatch": false
+				},
+				"dataSource": "ZDKSH_CC_DAC_MATLOOKUP_SRV",
+				"preload": true
+			},
+			"pomodel": {
+				"type": "sap.ui.model.json.JSONModel",
+				"dataSource": "po_data"
+			},
+			"aPOModel": {
+				"type": "sap.ui.model.json.JSONModel"
+			}
+		},
+		"resources": {
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"async": true,
+				"viewPath": "com.incture.cherrywork.newdac.view",
+				"controlAggregation": "pages",
+				"controlId": "app",
+				"clearControlAggregation": false
+			},
+			"routes": [
+				{
+					"name": "RouteUserProv",
+					"pattern": "",
+					"target": [
+						"TargetUserProv"
+					]
+				},
+				{
+					"name": "Create",
+					"pattern": "Create({contextPath})",
+					"target": [
+						"Create"
+					]
+				},
+				{
+					"name": "SplitApp",
+					"pattern": "SplitApp",
+					"target": [
+						"masterView",
+						"detailViewP"
+					]
+				},
+				{
+					"name": "masterView",
+					"pattern": "masterView",
+					"target": [
+						"masterView",
+						"detailViewP"
+					]
+				},
+				{
+					"name": "CreatePermissionObject",
+					"pattern": "CreatePermissionObject",
+					"target": [
+						"CreatePermissionObject"
+					]
+				},
+				{
+					"name": "EditPermissionObject",
+					"pattern": "EditPermissionObject",
+					"target": [
+						"EditPermissionObject",
+						"masterView"
+					]
+				},
+				{
+					"name": "detailViewP",
+					"pattern": "detailViewP/{pid}",
+					"target": [
+						"detailViewP",
+						"masterView"
+					]
+				}
+			],
+			"targets": {
+				"TargetUserProv": {
+					"viewType": "XML",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewId": "UserProv",
+					"viewName": "UserProv"
+				},
+				"Create": {
+					"viewType": "XML",
+					"viewName": "Create"
+				},
+				"App": {
+					"viewType": "XML",
+					"viewName": "App"
+				},
+				"SplitApp": {
+					"viewType": "XML",
+					"viewName": "SplitApp"
+				},
+				"masterView": {
+					"viewType": "XML",
+					"viewName": "PermissionObjectMaster",
+					"viewLevel": 1,
+					"viewId": "masterPageId",
+					"parent": "SplitApp",
+					"controlId": "idSplitAppControl",
+					"clearControlAggregation": false,
+					"controlAggregation": "masterPages"
+				},
+				"detailViewP": {
+					"viewType": "XML",
+					"viewName": "PermissionObjectDetail",
+					"viewLevel": 1,
+					"viewId": "detailPageId",
+					"parent": "SplitApp",
+					"controlId": "idSplitAppControl",
+					"clearControlAggregation": false,
+					"controlAggregation": "detailPages"
+				},
+				"CreatePermissionObject": {
+					"viewType": "XML",
+					"viewName": "CreatePermissionObject"
+				},
+				"EditPermissionObject": {
+					"viewType": "XML",
+					"viewName": "EditPermissionObject",
+					"viewLevel": 1,
+					"viewId": "editPageId",
+					"parent": "SplitApp",
+					"controlId": "idSplitAppControl",
+					"clearControlAggregation": false,
+					"controlAggregation": "detailPages"
+				}
+			}
+		}
+	},
+	"sap.platform.hcp": {
+		"uri": "webapp",
+		"_version": "1.1.0"
+	}
 }
