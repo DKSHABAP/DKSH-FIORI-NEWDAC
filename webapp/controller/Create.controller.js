@@ -1985,7 +1985,19 @@ sap.ui.define([
 						dataType: "json",
 						async: false,
 						success: function (data, textStatus, jqXHR) {},
-						error: function (data, textStatus, jqXHR) {}
+						error: function (data, textStatus, jqXHR) {
+							// DFCT0012852
+							jQuery.ajax({
+								type: "POST",
+								data: JSON.stringify(postData),
+								contentType: "application/json",
+								url: "/DKSHJavaService/userDetails/saveOrUpdate",
+								dataType: "json",
+								async: false,
+								success: function (data, textStatus, jqXHR) {},
+								error: function (data, textStatus, jqXHR) {}
+							});
+						}
 					});
 					that.updateGroupForUser(oUserDetail, oUserDetail.selectedGroup, oUserDetail.groupSelected);
 				} else {
