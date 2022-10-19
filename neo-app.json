@@ -69,7 +69,7 @@
 		"path": "/DKSHJavaService",
 		"target": {
 			"type": "destination",
-			"name": "DKSHJavaServiceAppToSSO2"
+			"name": "Demo_UserManagement"
 		},
 		"description": "DKSH Java Services"
 	}],
