@@ -41,14 +41,14 @@ sap.ui.define([
 			var that = this;
 			var fData = [];
 			var sURI = '/UserManagement/scim/Users?filter=groups.display co "DKSH_CC"';
-			this.getOwnerComponent().getApiModel("CCUsers", sURI, value === "sync" ).then(
+			this.getOwnerComponent().getApiModel("CCUsers", sURI, value === "sync").then(
 				function (oData) {
 					var resultData = {
 						resources: oData.Resources ? oData.Resources : null
 					};
 					if (resultData.resources) {
-						if (value)
-							sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncOk"));
+						// if (value)
+						// 	sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncOk"));
 						var finalData = [];
 						for (var i = 0; i < resultData.resources.length; i++) {
 							var phoneNo = "";
@@ -154,8 +154,26 @@ sap.ui.define([
 						});
 						oModelData.setSizeLimit(merged.length);
 						that.getView().byId("ID_TABLE_USR").setModel(oModelData, "UsetTableSet");
-						oBusyDialog.close();
-
+						if (value === "sync") {
+							jQuery.ajax({
+								type: "POST",
+								data: JSON.stringify(oData),
+								contentType: "application/json",
+								url: "/DKSHJavaService/userDetails/syncWithHana",
+								dataType: "json",
+								async: true,
+								success: function (jqXHR, textStatus, res) {
+									sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncOk"));
+									oBusyDialog.close();
+								},
+								error: function (error) {
+									sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncNok"));
+									oBusyDialog.close();
+								}
+							});
+						} else {
+							oBusyDialog.close();
+						}
 					} else {
 						sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncNok"));
 						oBusyDialog.close();
