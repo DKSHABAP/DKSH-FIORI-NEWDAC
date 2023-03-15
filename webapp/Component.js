@@ -53,7 +53,7 @@ sap.ui.define([
 					);
 				});
 			};
-			if (bSync){
+			if (bSync) {
 				this.oApiModel[sModel] = null;
 			}
 			if (!this.oApiModel[sModel]) {
@@ -95,12 +95,57 @@ sap.ui.define([
 			}
 			return this.oApiModel[sModel];
 		},
-		
+
+		/** 
+		 * Get API model by ID
+		 * @param sModel string API model key
+		 * @param sURI string URI string
+		 * @param bSync boolean force reload
+		 * @returns Promise GET response data
+		 */
+		getApiModelById: function (sModel, sURI, bSync) {
+			var oModel = new sap.ui.model.json.JSONModel();
+			var fnLoadModel = function (sURL, oParameters) {
+				var aResponse = [];
+				return new Promise(function (fnResolve) {
+					oModel.loadData(sURL, oParameters).then(
+						function () {
+							var oResponse = oModel.getData();
+							aResponse.push(oResponse);
+							if (oResponse.nextId === "end") {
+								fnResolve(aResponse);
+							} else {
+								fnLoadModel(sURL, {
+									startId: oResponse.nextId
+								}).then(function (aSub) {
+									aResponse = aResponse.concat(aSub);
+									fnResolve(aResponse);
+								});
+							}
+						}
+					).catch(
+						function (oError) {
+							fnResolve(aResponse);
+						}
+					);
+				});
+			};
+			if (bSync) {
+				this.oApiModel[sModel] = null;
+			}
+			if (!this.oApiModel[sModel]) {
+				this.oApiModel[sModel] = fnLoadModel(sURI, {
+					startId: "initial"
+				});
+			}
+			return this.oApiModel[sModel];
+		},
+
 		/** 
 		 * @public
 		 * @override
 		 */
-		destroy: function(){
+		destroy: function () {
 			this.oApiModel = {};
 			UIComponent.prototype.destroy.apply(this, arguments);
 		}

@@ -49,15 +49,16 @@ sap.ui.define([
 						// var sURI = '/UserManagement/scim/Users?filter=groups.display co "DKSH_CC"';
 						// var sURI = "/UserManagement/scim/Users/" + oMember.value;
 						var sURI = '/UserManagement/scim/Users?filter=groups.display eq "' + oResource.displayName + '"';
-						that.getOwnerComponent().getApiModel("CCUsers/" + oResource.displayName, sURI, value === "sync").then(
-							function (oData) {
+						that.getOwnerComponent().getApiModelById("CCUsers/" + oResource.displayName, sURI, value === "sync").then(
+							function (aData) {
 								var resultData = {
-									resources: oData.Resources ? oData.Resources : null
+									resources: []
 								};
+								aData.forEach(function (oResponse) {
+									resultData.resources = resultData.resources.concat(oResponse.Resources);
+								});
 								if (resultData.resources) {
-									if (value)
-									// sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncOk"));
-										var finalData = [];
+									var finalData = [];
 									for (var i = 0; i < resultData.resources.length; i++) {
 										var phoneNo = "";
 										var country = "";
@@ -159,7 +160,8 @@ sap.ui.define([
 				});
 				if (aPromise.length > 0) {
 					Promise.allSettled(aPromise).then(function (aResult) {
-						sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncOk"));
+						if (value)
+							sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncOk"));
 						aResult.forEach(
 							function (oResult, iI) {
 								if (oResult.status === "fulfilled") {
@@ -168,7 +170,10 @@ sap.ui.define([
 							}
 						);
 						// fData.push(finalData);
-						var mergedArr = [].concat.apply([], fData);
+						var mergedArr = [];
+						fData.forEach(function (aData) {
+							mergedArr = mergedArr.concat(aData);
+						});
 
 						var flags = {};
 						var merged = mergedArr.filter(function (entry) {
