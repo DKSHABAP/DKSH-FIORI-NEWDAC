@@ -40,100 +40,140 @@ sap.ui.define([
 			oBusyDialog.open();
 			var that = this;
 			var fData = [];
-			var sURI = '/UserManagement/scim/Users?filter=groups.display co "DKSH_CC"';
-			this.getOwnerComponent().getApiModel("CCUsers", sURI, value === "sync").then(
-				function (oData) {
-					var resultData = {
-						resources: oData.Resources ? oData.Resources : null
-					};
-					if (resultData.resources) {
-						// if (value)
-						// 	sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncOk"));
-						var finalData = [];
-						for (var i = 0; i < resultData.resources.length; i++) {
-							var phoneNo = "";
-							var country = "";
-							if (resultData.resources[i].phoneNumbers) {
-								if (resultData.resources[i].phoneNumbers.length > 0) {
-									phoneNo = resultData.resources[i].phoneNumbers[0].value;
+			var sURL = '/UserManagement/scim/Groups?filter=displayName co "DKSH_CC"';
+			this.getOwnerComponent().getApiModel("CCGroups", sURL, false).then(function (oGroup) {
+				var aPromise = [];
+				(oGroup.Resources || []).forEach(function (oResource, iIndex) {
+					// (oResource.members || []).forEach(function (oMember, jIndex) {
+					aPromise.push(new Promise(function (fnResolve, fnReject) {
+						// var sURI = '/UserManagement/scim/Users?filter=groups.display co "DKSH_CC"';
+						// var sURI = "/UserManagement/scim/Users/" + oMember.value;
+						var sURI = '/UserManagement/scim/Users?filter=groups.display eq "' + oResource.displayName + '"';
+						that.getOwnerComponent().getApiModelById("CCUsers/" + oResource.displayName, sURI, value === "sync").then(
+							function (aData) {
+								var resultData = {
+									resources: []
+								};
+								aData.forEach(function (oResponse) {
+									resultData.resources = resultData.resources.concat(oResponse.Resources);
+								});
+								if (resultData.resources) {
+									var finalData = [];
+									for (var i = 0; i < resultData.resources.length; i++) {
+										var phoneNo = "";
+										var country = "";
+										if (resultData.resources[i].phoneNumbers) {
+											if (resultData.resources[i].phoneNumbers.length > 0) {
+												phoneNo = resultData.resources[i].phoneNumbers[0].value;
+											}
+										}
+										// country
+										if (resultData.resources[i].addresses) {
+											if (resultData.resources[i].addresses.length > 0) {
+												country = resultData.resources[i].addresses[0].country;
+											}
+										}
+
+										var salesOrgArr = [];
+										var distributionChannel = [];
+										var district = [];
+										var materialGrp = [];
+										var materialGrp4 = [];
+										var custNoArr = [];
+										var materialGrpOne = [];
+										if (resultData.resources[i].userCustomAttributes) {
+											var attributesArr = resultData.resources[i].userCustomAttributes.attributes;
+
+											for (var a = 0; a < attributesArr.length; a++) {
+												if (attributesArr[a].name === "customAttribute1") {
+													salesOrgArr = attributesArr[a].value.split("@");
+												}
+											}
+
+											for (var b = 0; b < attributesArr.length; b++) {
+												if (attributesArr[b].name === "customAttribute2") {
+													distributionChannel = attributesArr[b].value.split("@");
+												}
+											}
+
+											for (var c = 0; c < attributesArr.length; c++) {
+												if (attributesArr[c].name === "customAttribute3") {
+													district = attributesArr[c].value.split("@");
+												}
+											}
+
+											for (var d = 0; d < attributesArr.length; d++) {
+												if (attributesArr[d].name === "customAttribute4") {
+													materialGrp = attributesArr[d].value.split("@");
+												}
+											}
+
+											for (var e = 0; e < attributesArr.length; e++) {
+												if (attributesArr[e].name === "customAttribute5") {
+													materialGrp4 = attributesArr[e].value.split("@");
+												}
+											}
+
+											for (var f = 0; f < attributesArr.length; f++) {
+												if (attributesArr[f].name === "customAttribute6") {
+													custNoArr = attributesArr[f].value.split("@");
+												}
+											}
+
+										}
+										finalData.push({
+											uuId: resultData.resources[i].id,
+											schemas: resultData.resources[i].schemas,
+											groups: resultData.resources[i].groups,
+											id: resultData.resources[i]["urn:ietf:params:scim:schemas:extension:sap:2.0:User"].userId,
+											familyName: resultData.resources[i].name.familyName,
+											givenName: resultData.resources[i].name.givenName,
+											emails: resultData.resources[i].emails[0].value,
+											FullName: resultData.resources[i].name.givenName + " " + resultData.resources[i].name.familyName,
+											phoneNumbers: phoneNo,
+											country: country,
+											SalesOrganization: salesOrgArr,
+											CustomerNumber: custNoArr,
+											DistributionChannel: distributionChannel,
+											District: district,
+											MaterialGroup: materialGrp,
+											MaterialGroupOne: materialGrpOne,
+											MaterialGroup4: materialGrp4
+										});
+									}
+									// oBusyDialog.close();
+									fnResolve(finalData);
+								} else {
+									// sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncNok"));
+									// oBusyDialog.close();
+									fnReject();
+								}
+							},
+							function (oError) {
+								// sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncNok"));
+								// oBusyDialog.close();
+								fnReject();
+							}
+						);
+					}));
+					// });
+				});
+				if (aPromise.length > 0) {
+					Promise.allSettled(aPromise).then(function (aResult) {
+						if (value)
+							sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncOk"));
+						aResult.forEach(
+							function (oResult, iI) {
+								if (oResult.status === "fulfilled") {
+									fData.push(oResult.value);
 								}
 							}
-							// country
-							if (resultData.resources[i].addresses) {
-								if (resultData.resources[i].addresses.length > 0) {
-									country = resultData.resources[i].addresses[0].country;
-								}
-							}
-
-							var salesOrgArr = [];
-							var distributionChannel = [];
-							var district = [];
-							var materialGrp = [];
-							var materialGrp4 = [];
-							var custNoArr = [];
-							var materialGrpOne = [];
-							if (resultData.resources[i].userCustomAttributes) {
-								var attributesArr = resultData.resources[i].userCustomAttributes.attributes;
-
-								for (var a = 0; a < attributesArr.length; a++) {
-									if (attributesArr[a].name === "customAttribute1") {
-										salesOrgArr = attributesArr[a].value.split("@");
-									}
-								}
-
-								for (var b = 0; b < attributesArr.length; b++) {
-									if (attributesArr[b].name === "customAttribute2") {
-										distributionChannel = attributesArr[b].value.split("@");
-									}
-								}
-
-								for (var c = 0; c < attributesArr.length; c++) {
-									if (attributesArr[c].name === "customAttribute3") {
-										district = attributesArr[c].value.split("@");
-									}
-								}
-
-								for (var d = 0; d < attributesArr.length; d++) {
-									if (attributesArr[d].name === "customAttribute4") {
-										materialGrp = attributesArr[d].value.split("@");
-									}
-								}
-
-								for (var e = 0; e < attributesArr.length; e++) {
-									if (attributesArr[e].name === "customAttribute5") {
-										materialGrp4 = attributesArr[e].value.split("@");
-									}
-								}
-
-								for (var f = 0; f < attributesArr.length; f++) {
-									if (attributesArr[f].name === "customAttribute6") {
-										custNoArr = attributesArr[f].value.split("@");
-									}
-								}
-
-							}
-							finalData.push({
-								uuId: resultData.resources[i].id,
-								schemas: resultData.resources[i].schemas,
-								groups: resultData.resources[i].groups,
-								id: resultData.resources[i]["urn:ietf:params:scim:schemas:extension:sap:2.0:User"].userId,
-								familyName: resultData.resources[i].name.familyName,
-								givenName: resultData.resources[i].name.givenName,
-								emails: resultData.resources[i].emails[0].value,
-								FullName: resultData.resources[i].name.givenName + " " + resultData.resources[i].name.familyName,
-								phoneNumbers: phoneNo,
-								country: country,
-								SalesOrganization: salesOrgArr,
-								CustomerNumber: custNoArr,
-								DistributionChannel: distributionChannel,
-								District: district,
-								MaterialGroup: materialGrp,
-								MaterialGroupOne: materialGrpOne,
-								MaterialGroup4: materialGrp4
-							});
-						}
-						fData.push(finalData);
-						var mergedArr = [].concat.apply([], fData);
+						);
+						// fData.push(finalData);
+						var mergedArr = [];
+						fData.forEach(function (aData) {
+							mergedArr = mergedArr.concat(aData);
+						});
 
 						var flags = {};
 						var merged = mergedArr.filter(function (entry) {
@@ -152,12 +192,14 @@ sap.ui.define([
 						var oModelData = new sap.ui.model.json.JSONModel({
 							results: merged
 						});
-						oModelData.setSizeLimit(merged.length);
+						// oModelData.setSizeLimit(merged.length);
 						that.getView().byId("ID_TABLE_USR").setModel(oModelData, "UsetTableSet");
 						if (value === "sync") {
 							jQuery.ajax({
 								type: "POST",
-								data: JSON.stringify(oData),
+								data: JSON.stringify({
+									Resources: merged
+								}),
 								contentType: "application/json",
 								url: "/DKSHJavaService/userDetails/syncWithHana",
 								dataType: "json",
@@ -174,16 +216,12 @@ sap.ui.define([
 						} else {
 							oBusyDialog.close();
 						}
-					} else {
-						sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncNok"));
-						oBusyDialog.close();
-					}
-				},
-				function (oError) {
+					});
+				} else {
 					sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncNok"));
 					oBusyDialog.close();
 				}
-			);
+			});
 		},
 
 		refreshBtnUser: function () {
@@ -316,8 +354,8 @@ sap.ui.define([
 			this.oModelMaterial = this.getView().getModel("MaterialModel");
 			this.getView().byId("ID_PAGE_USER_PR").setVisible(false);
 			this.getView().byId("ID_PAGE_USER_PR").setVisible(true);
-			var sURL = '/UserManagement/scim/Groups?filter=displayName co "DKSH_CC"';
-			this.getOwnerComponent().getApiModel("CCGroups", sURL, false);
+			// var sURL = '/UserManagement/scim/Groups?filter=displayName co "DKSH_CC"';
+			// this.getOwnerComponent().getApiModel("CCGroups", sURL, false);
 		},
 
 		//function to open Reset password confirmation box
