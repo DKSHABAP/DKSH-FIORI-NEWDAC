@@ -682,11 +682,17 @@ sap.ui.define([
 				dataType: "json",
 				async: false,
 				success: function (jqXHR, textStatus, res) {
-					if (res.status === 200) {
-						sap.m.MessageToast.show(jqXHR.responseText);
-					} else {
-						sap.m.MessageToast.show(jqXHR.responseText);
-					}
+					// if (res.status === 200) {
+					// 	sap.m.MessageToast.show(jqXHR.responseText);
+					// } else {
+					// 	sap.m.MessageToast.show(jqXHR.responseText);
+					// }
+					sap.m.MessageToast.show(
+						that.i18nModel.getResourceBundle().getText("removePO", [
+							postData.permissionObjectGuid.length,
+							postData.userId
+						])
+					);
 					that.assignUNPODialog.close();
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
