@@ -7,9 +7,11 @@ sap.ui.define([
 	"use strict";
 	return Controller.extend("com.incture.cherrywork.newdac.controller.UserProv", {
 		formatter: formatter,
-
 		onInit: function () {
-			this.getView().byId("ID_TABLE_USR").setSticky(["ColumnHeaders", "HeaderToolbar"]);
+			this.getView().byId("ID_TABLE_USR").setSticky([
+				"ColumnHeaders",
+				"HeaderToolbar"
+			]);
 			var oModelRef = new sap.ui.model.json.JSONModel({
 				refreshUser: true
 			});
@@ -17,7 +19,6 @@ sap.ui.define([
 			var router = sap.ui.core.UIComponent.getRouterFor(this);
 			router.attachRoutePatternMatched(this._handleRouteMatched, this);
 		},
-
 		_handleRouteMatched: function (oEvent) {
 			var userModel = new sap.ui.model.json.JSONModel("/services/userapi/currentUser", "", false);
 			sap.ui.getCore().setModel(userModel, "userapi");
@@ -40,7 +41,7 @@ sap.ui.define([
 			oBusyDialog.open();
 			var that = this;
 			var fData = [];
-			var sURL = '/UserManagement/scim/Groups?filter=displayName co "DKSH_CC"';
+			var sURL = "/UserManagement/scim/Groups?filter=displayName co \"DKSH_CC\"";
 			this.getOwnerComponent().getApiModel("CCGroups", sURL, false).then(function (oGroup) {
 				var aPromise = [];
 				(oGroup.Resources || []).forEach(function (oResource, iIndex) {
@@ -48,133 +49,119 @@ sap.ui.define([
 					aPromise.push(new Promise(function (fnResolve, fnReject) {
 						// var sURI = '/UserManagement/scim/Users?filter=groups.display co "DKSH_CC"';
 						// var sURI = "/UserManagement/scim/Users/" + oMember.value;
-						var sURI = '/UserManagement/scim/Users?filter=groups.display eq "' + oResource.displayName + '"';
-						that.getOwnerComponent().getApiModelById("CCUsers/" + oResource.displayName, sURI, value === "sync").then(
-							function (aData) {
-								var resultData = {
-									resources: []
-								};
-								aData.forEach(function (oResponse) {
-									resultData.resources = resultData.resources.concat(oResponse.Resources);
-								});
-								if (resultData.resources) {
-									var finalData = [];
-									for (var i = 0; i < resultData.resources.length; i++) {
-										var phoneNo = "";
-										var country = "";
-										if (resultData.resources[i].phoneNumbers) {
-											if (resultData.resources[i].phoneNumbers.length > 0) {
-												phoneNo = resultData.resources[i].phoneNumbers[0].value;
-											}
+						var sURI = "/UserManagement/scim/Users?filter=groups.display eq \"" + oResource.displayName + "\"";
+						that.getOwnerComponent().getApiModelById("CCUsers/" + oResource.displayName, sURI, value === "sync").then(function (aData) {
+							var resultData = {
+								resources: []
+							};
+							aData.forEach(function (oResponse) {
+								resultData.resources = resultData.resources.concat(oResponse.Resources);
+							});
+							if (resultData.resources) {
+								var finalData = [];
+								for (var i = 0; i < resultData.resources.length; i++) {
+									var phoneNo = "";
+									var country = "";
+									if (resultData.resources[i].phoneNumbers) {
+										if (resultData.resources[i].phoneNumbers.length > 0) {
+											phoneNo = resultData.resources[i].phoneNumbers[0].value;
 										}
-										// country
-										if (resultData.resources[i].addresses) {
-											if (resultData.resources[i].addresses.length > 0) {
-												country = resultData.resources[i].addresses[0].country;
-											}
-										}
-
-										var salesOrgArr = [];
-										var distributionChannel = [];
-										var district = [];
-										var materialGrp = [];
-										var materialGrp4 = [];
-										var custNoArr = [];
-										var materialGrpOne = [];
-										if (resultData.resources[i].userCustomAttributes) {
-											var attributesArr = resultData.resources[i].userCustomAttributes.attributes;
-
-											for (var a = 0; a < attributesArr.length; a++) {
-												if (attributesArr[a].name === "customAttribute1") {
-													salesOrgArr = attributesArr[a].value.split("@");
-												}
-											}
-
-											for (var b = 0; b < attributesArr.length; b++) {
-												if (attributesArr[b].name === "customAttribute2") {
-													distributionChannel = attributesArr[b].value.split("@");
-												}
-											}
-
-											for (var c = 0; c < attributesArr.length; c++) {
-												if (attributesArr[c].name === "customAttribute3") {
-													district = attributesArr[c].value.split("@");
-												}
-											}
-
-											for (var d = 0; d < attributesArr.length; d++) {
-												if (attributesArr[d].name === "customAttribute4") {
-													materialGrp = attributesArr[d].value.split("@");
-												}
-											}
-
-											for (var e = 0; e < attributesArr.length; e++) {
-												if (attributesArr[e].name === "customAttribute5") {
-													materialGrp4 = attributesArr[e].value.split("@");
-												}
-											}
-
-											for (var f = 0; f < attributesArr.length; f++) {
-												if (attributesArr[f].name === "customAttribute6") {
-													custNoArr = attributesArr[f].value.split("@");
-												}
-											}
-
-										}
-										finalData.push({
-											uuId: resultData.resources[i].id,
-											schemas: resultData.resources[i].schemas,
-											groups: resultData.resources[i].groups,
-											id: resultData.resources[i]["urn:ietf:params:scim:schemas:extension:sap:2.0:User"].userId,
-											familyName: resultData.resources[i].name.familyName,
-											givenName: resultData.resources[i].name.givenName,
-											emails: resultData.resources[i].emails[0].value,
-											FullName: resultData.resources[i].name.givenName + " " + resultData.resources[i].name.familyName,
-											phoneNumbers: phoneNo,
-											country: country,
-											SalesOrganization: salesOrgArr,
-											CustomerNumber: custNoArr,
-											DistributionChannel: distributionChannel,
-											District: district,
-											MaterialGroup: materialGrp,
-											MaterialGroupOne: materialGrpOne,
-											MaterialGroup4: materialGrp4
-										});
 									}
-									// oBusyDialog.close();
-									fnResolve(finalData);
-								} else {
-									// sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncNok"));
-									// oBusyDialog.close();
-									fnReject();
+									// country
+									if (resultData.resources[i].addresses) {
+										if (resultData.resources[i].addresses.length > 0) {
+											country = resultData.resources[i].addresses[0].country;
+										}
+									}
+									var salesOrgArr = [];
+									var distributionChannel = [];
+									var district = [];
+									var materialGrp = [];
+									var materialGrp4 = [];
+									var custNoArr = [];
+									var materialGrpOne = [];
+									if (resultData.resources[i].userCustomAttributes) {
+										var attributesArr = resultData.resources[i].userCustomAttributes.attributes;
+										for (var a = 0; a < attributesArr.length; a++) {
+											if (attributesArr[a].name === "customAttribute1") {
+												salesOrgArr = attributesArr[a].value.split("@");
+											}
+										}
+										for (var b = 0; b < attributesArr.length; b++) {
+											if (attributesArr[b].name === "customAttribute2") {
+												distributionChannel = attributesArr[b].value.split("@");
+											}
+										}
+										for (var c = 0; c < attributesArr.length; c++) {
+											if (attributesArr[c].name === "customAttribute3") {
+												district = attributesArr[c].value.split("@");
+											}
+										}
+										for (var d = 0; d < attributesArr.length; d++) {
+											if (attributesArr[d].name === "customAttribute4") {
+												materialGrp = attributesArr[d].value.split("@");
+											}
+										}
+										for (var e = 0; e < attributesArr.length; e++) {
+											if (attributesArr[e].name === "customAttribute5") {
+												materialGrp4 = attributesArr[e].value.split("@");
+											}
+										}
+										for (var f = 0; f < attributesArr.length; f++) {
+											if (attributesArr[f].name === "customAttribute6") {
+												custNoArr = attributesArr[f].value.split("@");
+											}
+										}
+									}
+									finalData.push({
+										uuId: resultData.resources[i].id,
+										schemas: resultData.resources[i].schemas,
+										groups: resultData.resources[i].groups,
+										id: resultData.resources[i]["urn:ietf:params:scim:schemas:extension:sap:2.0:User"].userId,
+										familyName: resultData.resources[i].name.familyName,
+										givenName: resultData.resources[i].name.givenName,
+										emails: resultData.resources[i].emails[0].value,
+										FullName: resultData.resources[i].name.givenName + " " + resultData.resources[i].name.familyName,
+										active: resultData.resources[i].active,
+										phoneNumbers: phoneNo,
+										country: country,
+										SalesOrganization: salesOrgArr,
+										CustomerNumber: custNoArr,
+										DistributionChannel: distributionChannel,
+										District: district,
+										MaterialGroup: materialGrp,
+										MaterialGroupOne: materialGrpOne,
+										MaterialGroup4: materialGrp4
+									});
 								}
-							},
-							function (oError) {
+								// oBusyDialog.close();
+								fnResolve(finalData);
+							} else {
 								// sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncNok"));
 								// oBusyDialog.close();
 								fnReject();
 							}
-						);
-					}));
-					// });
+						}, function (oError) {
+							// sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncNok"));
+							// oBusyDialog.close();
+							fnReject();
+						});
+					})); // });
 				});
 				if (aPromise.length > 0) {
 					Promise.allSettled(aPromise).then(function (aResult) {
 						if (value)
 							sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncOk"));
-						aResult.forEach(
-							function (oResult, iI) {
-								if (oResult.status === "fulfilled") {
-									fData.push(oResult.value);
-								}
+						aResult.forEach(function (oResult, iI) {
+							if (oResult.status === "fulfilled") {
+								fData.push(oResult.value);
 							}
-						);
+						});
 						// fData.push(finalData);
 						var mergedArr = [];
 						fData.forEach(function (aData) {
 							mergedArr = mergedArr.concat(aData);
 						});
-
 						var flags = {};
 						var merged = mergedArr.filter(function (entry) {
 							if (flags[entry.id]) {
@@ -183,9 +170,8 @@ sap.ui.define([
 							flags[entry.id] = true;
 							return true;
 						});
-
 						merged.sort(function (j, k) {
-							return (j.id > k.id) ? 1 : ((k.id > j.id) ? -1 : 0);
+							return j.id > k.id ? 1 : k.id > j.id ? -1 : 0;
 						});
 						var msgTotal = that.i18nModel.getProperty("userDetails");
 						that.getView().byId("ID_TXT_HDR").setText(msgTotal + " (" + merged.length + ")");
@@ -194,7 +180,28 @@ sap.ui.define([
 						});
 						// oModelData.setSizeLimit(merged.length);
 						that.getView().byId("ID_TABLE_USR").setModel(oModelData, "UsetTableSet");
-						oBusyDialog.close();
+						if (value === "sync") {
+							jQuery.ajax({
+								type: "POST",
+								data: JSON.stringify({
+									Resources: merged
+								}),
+								contentType: "application/json",
+								url: "/DKSHJavaService/userDetails/syncWithHana",
+								dataType: "json",
+								async: true,
+								success: function (jqXHR, textStatus, res) {
+									sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncOk"));
+									oBusyDialog.close();
+								},
+								error: function (error) {
+									sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncNok"));
+									oBusyDialog.close();
+								}
+							});
+						} else {
+							oBusyDialog.close();
+						}
 					});
 				} else {
 					sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("syncNok"));
@@ -202,19 +209,16 @@ sap.ui.define([
 				}
 			});
 		},
-
 		refreshBtnUser: function () {
 			this.getAllUsers();
 		},
 		syncBtnUser: function () {
 			this.getAllUsers("sync");
 		},
-
 		//on update cancel
 		onPressCancelUpdateUserFrag: function () {
 			this.oUpdateIOPUserDialog.close();
 		},
-
 		//on user update
 		onUserUpdate: function (oEvent) {
 			//for 
@@ -252,7 +256,6 @@ sap.ui.define([
 				MaterialGroup4: selectObj.MaterialGroup4
 			});
 			sap.ui.getCore().setModel(oModel, "UpdateCreateUserModelSet");
-
 			if (oEvent.getSource().getProperty("src") === "sap-icon://display") {
 				var oModelCrUpd = new sap.ui.model.json.JSONModel({
 					UpdateCreateInd: "Display",
@@ -264,7 +267,6 @@ sap.ui.define([
 				});
 				sap.ui.getCore().setModel(oModelCrUpd, "UpdateCreateIndModel");
 			} else {
-
 				var oModelCrUpd1 = new sap.ui.model.json.JSONModel({
 					UpdateCreateInd: "Update",
 					Create: false,
@@ -275,17 +277,14 @@ sap.ui.define([
 				});
 				sap.ui.getCore().setModel(oModelCrUpd1, "UpdateCreateIndModel");
 			}
-
 			var router = sap.ui.core.UIComponent.getRouterFor(that);
 			router.navTo("Create", {
 				contextPath: selectObj.id
 			});
 			oBusyDialog.close();
 		},
-
 		//on User Create Button
 		onUserCreate: function () {
-
 			var oModel = new sap.ui.model.json.JSONModel({
 				id: "",
 				group: "",
@@ -302,7 +301,6 @@ sap.ui.define([
 				SalesOrganization: []
 			});
 			sap.ui.getCore().setModel(oModel, "UpdateCreateUserModelSet");
-
 			var oModelCrUpd = new sap.ui.model.json.JSONModel({
 				UpdateCreateInd: "Create",
 				Create: true,
@@ -312,14 +310,11 @@ sap.ui.define([
 				showPO: false
 			});
 			sap.ui.getCore().setModel(oModelCrUpd, "UpdateCreateIndModel");
-
 			var router = sap.ui.core.UIComponent.getRouterFor(this);
 			router.navTo("Create", {
 				contextPath: "New"
 			});
-
 		},
-
 		onPressCancelUserFrag: function () {
 			this.oCreateIOPUserDialog.close();
 		},
@@ -332,11 +327,9 @@ sap.ui.define([
 			this.oModel = this.getView().getModel("SalesOrganization");
 			this.oModelMaterial = this.getView().getModel("MaterialModel");
 			this.getView().byId("ID_PAGE_USER_PR").setVisible(false);
-			this.getView().byId("ID_PAGE_USER_PR").setVisible(true);
-			// var sURL = '/UserManagement/scim/Groups?filter=displayName co "DKSH_CC"';
+			this.getView().byId("ID_PAGE_USER_PR").setVisible(true); // var sURL = '/UserManagement/scim/Groups?filter=displayName co "DKSH_CC"';
 			// this.getOwnerComponent().getApiModel("CCGroups", sURL, false);
 		},
-
 		//function to open Reset password confirmation box
 		onResetPwd: function (oEvent) {
 			var that = this;
@@ -347,7 +340,10 @@ sap.ui.define([
 			var oMsg = "Are you sure you want to reset password for : " + oName + " (" + oUserId + ") ?";
 			sap.m.MessageBox.confirm(oMsg, {
 				styleClass: "sapUiSizeCompact",
-				actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+				actions: [
+					sap.m.MessageBox.Action.YES,
+					sap.m.MessageBox.Action.NO
+				],
 				initialFocus: MessageBox.Action.NO,
 				onClose: function (oAction) {
 					if (oAction === "YES") {
@@ -356,7 +352,6 @@ sap.ui.define([
 				}
 			});
 		},
-
 		//function to send reset password link to the Email ID
 		triggerResetPwdServ: function (oName, oUserId, oEmailId) {
 			var sUrl = "/IDPService/service/users/forgotPassword";
@@ -379,28 +374,23 @@ sap.ui.define([
 				sap.m.MessageBox.error(oEvent.getParameters().errorobject.responseText);
 			});
 		},
-
 		//on search user Details
 		onSearchUserList: function (oEvent) {
 			var that = this;
 			var value = oEvent.getParameters().newValue;
 			var filters = [];
-			var oFilter = new sap.ui.model.Filter([new sap.ui.model.Filter("id", sap.ui.model.FilterOperator.Contains, value),
+			var oFilter = new sap.ui.model.Filter([
+				new sap.ui.model.Filter("id", sap.ui.model.FilterOperator.Contains, value),
 				new sap.ui.model.Filter("FullName", sap.ui.model.FilterOperator.Contains, value),
 				new sap.ui.model.Filter("emails", sap.ui.model.FilterOperator.Contains, value),
 				new sap.ui.model.Filter("phoneNumbers", sap.ui.model.FilterOperator.Contains, value)
-
 			]);
 			filters.push(oFilter);
 			var oBinding = this.getView().byId("ID_TABLE_USR").getBinding("items");
 			oBinding.filter(filters);
 			var msgTotal = that.i18nModel.getProperty("userDetails");
-			that.getView().byId("ID_TXT_HDR").setText(msgTotal + " (" + oBinding.getLength() + ")");
-
-			//	this.getView().byId("").setText()
-
+			that.getView().byId("ID_TXT_HDR").setText(msgTotal + " (" + oBinding.getLength() + ")"); //	this.getView().byId("").setText()
 		},
-
 		//function to pop up delete confirmation box
 		onDeleteUser: function (oEvent) {
 			var that = this;
@@ -409,7 +399,10 @@ sap.ui.define([
 			var oName = oContextObj.givenName + " " + oContextObj.familyName;
 			sap.m.MessageBox.confirm("Are you sure you want to delete - " + oName + " (" + oUserId + ")", {
 				styleClass: "sapUiSizeCompact",
-				actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+				actions: [
+					sap.m.MessageBox.Action.YES,
+					sap.m.MessageBox.Action.NO
+				],
 				initialFocus: MessageBox.Action.NO,
 				onClose: function (oAction) {
 					if (oAction === "YES") {
@@ -418,7 +411,6 @@ sap.ui.define([
 				}
 			});
 		},
-
 		//function to delete User
 		triggerDeleteUserServ: function (oName, oUserId, oUserData) {
 			var that = this;
@@ -452,14 +444,12 @@ sap.ui.define([
 				sap.m.MessageBox.error(oMsg);
 			});
 		},
-
 		//on press assigned groups
 		onPressAssignedGroup: function (oEvent) {
 			if (!this.groupsForAssingFrag) {
 				this.groupsForAssingFrag = sap.ui.xmlfragment("com.incture.cherrywork.newdac.fragments.GroupsList", this);
 				this.getView().addDependent(this.groupsForAssingFrag);
 			}
-
 			var selectedObj = oEvent.getSource().getBindingContext("UsetTableSet").getObject();
 			if (selectedObj.groups !== undefined) {
 				var oModel = new sap.ui.model.json.JSONModel({
@@ -472,7 +462,6 @@ sap.ui.define([
 				sap.m.MessageToast.show(msg);
 			}
 		},
-
 		//back to launchpad
 		handleBack: function () {
 			var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
@@ -483,7 +472,6 @@ sap.ui.define([
 				}
 			});
 		},
-
 		onViewPO: function () {
 			// sap.m.MessageBox.information("Please select a domain to maintain permission object from the list");
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("masterView");
@@ -510,12 +498,9 @@ sap.ui.define([
 					// });
 					aPOModel.setSizeLimit(1000);
 					aPOModel.setData(data);
-
 				}
-
 			});
 			if (!that.assignPODialog) {
-
 				that.assignPODialog = sap.ui.xmlfragment("com.incture.cherrywork.newdac.fragments.AddPOtoUsers", that);
 				/*	that.assignPODialog.setModel(aPOModel, "aPOModel");*/
 				that.getView().addDependent(that.assignPODialog);
@@ -526,7 +511,6 @@ sap.ui.define([
 			that.assignPODialog.open();
 		},
 		onUnAssignPo: function (oEvent) {
-
 			var that = this;
 			var selectObj = oEvent.getSource().getBindingContext("UsetTableSet").getObject();
 			this.sSelectObj = selectObj;
@@ -576,7 +560,10 @@ sap.ui.define([
 				if (data.length == this.assignUNPODialog.getModel("aUPOModel").getData().length) {
 					sap.m.MessageBox.information("All permission objects will be removed", {
 						styleClass: "sapUiSizeCompact",
-						actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+						actions: [
+							sap.m.MessageBox.Action.YES,
+							sap.m.MessageBox.Action.NO
+						],
 						initialFocus: MessageBox.Action.NO,
 						onClose: function (oAction) {
 							if (oAction === "YES") {
@@ -598,7 +585,6 @@ sap.ui.define([
 					for (var i = 0; i < newarray.length; i++) {
 						postArray.push(newarray[i].permissionObjectGuid);
 					}
-
 					jQuery.ajax({
 						type: "POST",
 						data: JSON.stringify(postArray),
@@ -614,8 +600,8 @@ sap.ui.define([
 								that.removePO(postData);
 							} else {
 								var oDialog = new sap.m.Dialog({
-									title: 'Confirm',
-									type: 'Message',
+									title: "Confirm",
+									type: "Message",
 									content: [new sap.m.Text({
 										text: error.responseText
 									})],
@@ -629,25 +615,19 @@ sap.ui.define([
 										}
 									}),
 									endButton: new sap.m.Button({
-										text: 'Cancel',
+										text: "Cancel",
 										press: function () {
-											oDialog.close();
-											// busyDialog.close();
+											oDialog.close(); // busyDialog.close();
 										}
-
 									}),
 									afterClose: function () {
 										oDialog.destroy();
 									}
 								});
-
 								oDialog.open();
 							}
-						},
-
-						// var userName = sap.ui.getCore().getModel("userapi").getData().name;
+						}
 					});
-
 				}
 			}
 		},
@@ -661,11 +641,15 @@ sap.ui.define([
 				dataType: "json",
 				async: false,
 				success: function (jqXHR, textStatus, res) {
-					if (res.status === 200) {
-						sap.m.MessageToast.show(jqXHR.responseText);
-					} else {
-						sap.m.MessageToast.show(jqXHR.responseText);
-					}
+					// if (res.status === 200) {
+					// 	sap.m.MessageToast.show(jqXHR.responseText);
+					// } else {
+					// 	sap.m.MessageToast.show(jqXHR.responseText);
+					// }
+					sap.m.MessageToast.show(that.i18nModel.getResourceBundle().getText("removePO", [
+						postData.permissionObjectGuid.length,
+						postData.userId
+					]));
 					that.assignUNPODialog.close();
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
@@ -675,8 +659,7 @@ sap.ui.define([
 					// if (jqXHR.status.includes("40")) {
 					var resp = jqXHR.responseText;
 					var oMsg = resp;
-					sap.m.MessageToast.show(oMsg);
-					// }
+					sap.m.MessageToast.show(oMsg); // }
 				}
 			});
 		},
@@ -712,8 +695,8 @@ sap.ui.define([
 					error: function (error) {
 						if (error.responseText.includes("assigned")) {
 							var oDialog = new sap.m.Dialog({
-								title: 'Confirm',
-								type: 'Message',
+								title: "Confirm",
+								type: "Message",
 								content: [new sap.m.Text({
 									text: error.responseText
 								})],
@@ -727,25 +710,20 @@ sap.ui.define([
 									}
 								}),
 								endButton: new sap.m.Button({
-									text: 'Cancel',
+									text: "Cancel",
 									press: function () {
-										oDialog.close();
-										// busyDialog.close();
+										oDialog.close(); // busyDialog.close();
 									}
-
 								}),
 								afterClose: function () {
 									oDialog.destroy();
 								}
 							});
-
 							oDialog.open();
 						} else if (error.status == 200) {
 							that.addPO(postData);
 						}
-					},
-
-					// var userName = sap.ui.getCore().getModel("userapi").getData().name;
+					}
 				});
 			}
 		},
@@ -771,10 +749,8 @@ sap.ui.define([
 					// if (jqXHR.responseText.includes("already assigned")) {
 					var resp = jqXHR.responseText;
 					var oMsg = resp;
-					sap.m.MessageToast.show(oMsg);
-					// }
+					sap.m.MessageToast.show(oMsg); // }
 				}
-
 			});
 		},
 		onPressCancelFrg: function () {
@@ -798,9 +774,7 @@ sap.ui.define([
 					that.downloadUser.open();
 					that.downloadUser.setModel(that.getView().getModel("domainModel"), "domainModel");
 				}
-			});
-			// this.getRouter().navTo("CreatePermissionObject");
-
+			}); // this.getRouter().navTo("CreatePermissionObject");
 		},
 		onDownloadFrag: function (oEvent) {
 			var selectedText = oEvent.getSource().getProperty("title");
@@ -811,7 +785,7 @@ sap.ui.define([
 					selectedText;
 			else
 				var url = "https://connectclientcdd660bcb.ap1.hana.ondemand.com/connect_client_phase-II/userDetails/downloadExcelForRights/" +
-					selectedText
+					selectedText;
 			window.open(url, "_self");
 			// var that = this;
 			// jQuery.ajax({
@@ -824,8 +798,7 @@ sap.ui.define([
 			// 		that.downloadUser.close();
 			// 	},
 			// 	error: function (textStatus, jqXHR) {
-			this.downloadUser.close();
-			// 	}
+			this.downloadUser.close(); // 	}
 			// });
 		},
 		onCancelFrag: function () {
@@ -839,7 +812,8 @@ sap.ui.define([
 				value = oEvent.getParameters().newValue;
 			}
 			var filters = [];
-			var oFilter = new sap.ui.model.Filter([new sap.ui.model.Filter("domainCode", sap.ui.model.FilterOperator.Contains, value),
+			var oFilter = new sap.ui.model.Filter([
+				new sap.ui.model.Filter("domainCode", sap.ui.model.FilterOperator.Contains, value),
 				new sap.ui.model.Filter("permissionObjectText", sap.ui.model.FilterOperator.Contains, value)
 			]);
 			filters.push(oFilter);
@@ -849,11 +823,9 @@ sap.ui.define([
 				var oBinding = sap.ui.getCore().byId("unassignTable").getBinding("items");
 			}
 			oBinding.filter(filters);
-
 		},
 		onCopyUsers: function () {
 				var that = this;
-
 				var aPOModel = new JSONModel();
 				aPOModel.loadData("model/userid.json");
 				if (!that.copyUsers) {
@@ -864,9 +836,60 @@ sap.ui.define([
 				that.copyUsers.open();
 			}
 			/*,
-				onExit: function () {
-					this.assignPODialog.destroy();
+						onExit: function () {
+							this.assignPODialog.destroy();
 
-				}*/
+						}*/
+			,
+		/**
+		 *@memberOf com.incture.cherrywork.newdac.controller.UserProv
+		 */
+		onChangeStatus: function (oEvent) {
+			//This code was generated by the layout editor.
+			var that = this;
+			var oContextObj = oEvent.getSource().getBindingContext("UsetTableSet").getObject();
+			var oUserId = oContextObj.id;
+			var oName = oContextObj.givenName + " " + oContextObj.familyName;
+			var oPayload = {
+				id: oContextObj.uuId,
+				status: oContextObj.active ? false : true
+			};
+			var sMessage = oContextObj.active ? this.i18nModel.getResourceBundle().getText("deactivatePopup", [oName, oUserId]) : this.i18nModel
+				.getResourceBundle().getText("activatePopup", [oName, oUserId]);
+			var sToast = oContextObj.active ? this.i18nModel.getResourceBundle().getText("deactivateToast") : this.i18nModel.getResourceBundle()
+				.getText("activateToast");
+			sap.m.MessageBox.confirm(sMessage, {
+				styleClass: "sapUiSizeCompact",
+				actions: [
+					sap.m.MessageBox.Action.YES,
+					sap.m.MessageBox.Action.NO
+				],
+				initialFocus: MessageBox.Action.NO,
+				onClose: function (oAction) {
+					if (oAction === "YES") {
+						jQuery.ajax({
+							type: "PUT",
+							data: JSON.stringify(oPayload),
+							contentType: "application/json",
+							url: "/DKSHJavaService/CCUser",
+							dataType: "json",
+							async: false,
+							success: function (jqXHR, textStatus, res) {
+								oContextObj.active = oPayload.status;
+								that.getView().byId("ID_TABLE_USR").getModel("UsetTableSet").refresh();
+								sap.m.MessageToast.show(sToast);
+							},
+							error: function (jqXHR, textStatus, errorThrown) {
+								//	sap.m.MessageToast.show("Error in checking");
+								// if (jqXHR.responseText.includes("already assigned")) {
+								var resp = jqXHR.responseText;
+								var oMsg = resp;
+								sap.m.MessageToast.show(oMsg); // }
+							}
+						});
+					}
+				}
+			});
+		}
 	});
 });
