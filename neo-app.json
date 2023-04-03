@@ -69,7 +69,7 @@
 		"path": "/DKSHJavaService",
 		"target": {
 			"type": "destination",
-			"name": "Demo_UserManagement"
+			"name": "UserManagement"
 		},
 		"description": "DKSH Java Services"
 	}],
