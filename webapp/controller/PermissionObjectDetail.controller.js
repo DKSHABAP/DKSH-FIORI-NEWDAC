@@ -5416,6 +5416,21 @@ sap.ui.define([
 			});
 		},
 		_fnUpdateCall: function (permissionObject, finalCreatePOArr, that) {
+			// jQuery.ajax({
+			// 	type: "GET",
+			// 	contentType: "application/json",
+			// 	url: "/DKSHJavaService",
+			// 	async: false,
+			// 	beforeSend: function (xhr) {
+			// 		xhr.setRequestHeader('x-csrf-token', 'Fetch');
+			// 	},
+			// 	success: function (jqXHR, textStatus, res) {
+			// 		that._token = res.getResponseHeader('x-csrf-token');
+			// 	},
+			// 	error: function (jqXHR, textStatus, errorThrown) {
+			// 		sap.m.MessageBox.error("Error in Service");
+			// 	}
+			// });
 			var busyDialog = new sap.m.BusyDialog();
 			busyDialog.open();
 			jQuery.ajax({
@@ -5423,6 +5438,12 @@ sap.ui.define([
 				data: finalCreatePOArr,
 				contentType: "application/json",
 				url: "/DKSHJavaService/permissionObjectDetails/updatePermisionObjectDetails",
+				// beforeSend: function (xhr) {
+				// 	xhr.setRequestHeader('x-csrf-token', that._token);
+				// },
+				// headers: {
+    //               'X-CSRF-Token': that._token
+    //             },
 				dataType: "json",
 				async: false,
 				success: function (jqXHR, textStatus, res) {
@@ -5567,8 +5588,8 @@ sap.ui.define([
 				dataType: "json",
 				async: false,
 				success: function (data, textStatus, jqXHR) {
-					if (data.status === "200 OK") {
-						busyDialog.close();
+					busyDialog.close();
+					if (jqXHR.status === 200) {
 						sap.m.MessageToast.show("permission object" + " " + objName + " " + "deleted.");
 						for (var j = 0; j < arr.length; j++) {
 							if (arr[j].permissionObjectText === objName) {
@@ -5593,7 +5614,7 @@ sap.ui.define([
 						that.getView().getModel("detModel").refresh(true);
 						that.expandOrCollapaseAllPanel(false);
 					} else {
-						sap.m.MessageToast(error.responseText);
+						sap.m.MessageToast.show(error.responseText);
 					}
 				}
 			});
@@ -7704,7 +7725,8 @@ sap.ui.define([
 			oSelsOrgDet.setSizeLimit(oSelsOrgDet.getData().results.permissionObjectDetailsDos.length);
 			oSelsOrgDet.refresh();
 			var msg1 = this.i18nModel.getProperty("MaterialCountLbl");
-			this.getView().byId("ID_PROV_LBL_C_MAT").setText(msg1 + " (" + oSelsOrgDet.getData().results.permissionObjectDetailsDos.length + ")");
+			this.getView().byId("ID_PROV_LBL_C_MAT").setText(msg1 + " (" + oSelsOrgDet.getData().results.permissionObjectDetailsDos.length +
+				")");
 		},
 		readMaterials: function (data) {
 			var that = this;
